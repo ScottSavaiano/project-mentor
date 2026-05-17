@@ -1,0 +1,100 @@
+# Project Mentor — Hermes profile distribution manifest
+#
+# Packages this profile as an installable Hermes agent. Anyone with access
+# to the GitHub repo can install the whole agent — SOUL, config, skills,
+# cron, mcp.json — with one command:
+#
+#     hermes profile install github.com/ScottSavaiano/project-mentor --alias
+#
+# When the educator tags a new version, students run:
+#
+#     hermes profile update project-mentor
+#
+# …and their installed mentor updates to the new SOUL and skills while
+# their own conversation history, memories, and config tuning are preserved.
+
+# -------------------------------------------------------------------
+# Identity
+# -------------------------------------------------------------------
+
+name: project-mentor
+
+# Version follows semver. v0.x while the mentor is still being built out;
+# v1.0.0 is reserved for the first release that ships all Tier 1 skills.
+version: 0.1.0
+
+description: |
+  Project Mentor — high-judgment social science research mentor for
+  Bronx Science's advanced research class. Walks the student through
+  the Project and Paper tracks of a multi-cycle research investigation:
+  problem identification, research question, literature review, gap,
+  paper structure, methodology, proposal, and the build-as-you-go
+  working paper. One of three agents in the Hermes Research Curriculum
+  (with research-agent and review-agent). Defaults to Claude Opus 4.7
+  with no automatic fallback.
+
+author: "Dr. Savaiano (Bronx High School of Science Social Science Research Program)"
+license: "MIT"
+
+# Minimum Hermes version. v0.12.0 is the floor — earlier versions have
+# weaker skill-protection guarantees (the curator's defense-in-depth
+# gates and the bundled-skill immunity behavior shipped in 0.12.0).
+# See hermes-platform-primer.md, Section 6.
+hermes_requires: ">=0.12.0"
+
+# -------------------------------------------------------------------
+# Environment variables required for install
+# -------------------------------------------------------------------
+# The installer checks these against the student's shell environment and
+# the profile's existing .env, then generates a .env.EXAMPLE the student
+# copies to .env and fills in. Each student receives a personalized
+# OpenRouter sub-key from the teacher (capped at $10–$15 / semester per
+# the implementation plan's Phase 0 single-provider decision).
+
+env_requires:
+  - name: OPENROUTER_API_KEY
+    description: |
+      Your assigned OpenRouter sub-key for the Hermes Research
+      Curriculum. Issued by the research teacher during setup
+      (Lesson 1) under the cohort's single organization account.
+      Capped at the per-student semester budget. Do not share.
+    required: true
+
+# -------------------------------------------------------------------
+# Distribution-owned paths (defaults are fine; left explicit for clarity)
+# -------------------------------------------------------------------
+# By default, `hermes profile update` REPLACES these paths from the new
+# clone: SOUL.md, mcp.json, skills/, cron/, distribution.yaml. config.yaml
+# is special-cased — it is PRESERVED on update unless --force-config is
+# passed, so a student's machine-specific terminal.cwd survives updates.
+# These defaults match what the curriculum wants; no override needed.
+#
+# Excluded from the distribution entirely (Hermes hard-excludes these,
+# no override possible): .env, auth.json, memories/, sessions/, state.db*,
+# logs/, workspace/, plans/, home/, *_cache/, local/. The student's own
+# work and credentials never travel into or out of the repo.
+
+# Skills, cron jobs, and mcp.json are intentionally not present in v0.1.0
+# — they are authored against mentor-architecture-specification.md and
+# added to the repo as each becomes final. Skill inventory is recorded
+# there (Section 12). The first skills to land:
+#
+#   skills/
+#     project-walkthrough/SKILL.md       # keystone (dispatch contract)
+#     paper-walkthrough/SKILL.md         # keystone (dispatch contract)
+#     design-project/SKILL.md            # Cycle 1 stage-skill
+#     develop-research-question/SKILL.md
+#     conduct-literature-review/SKILL.md
+#     identify-gap/SKILL.md
+#     select-paper-structure-reference-articles/SKILL.md
+#     derive-paper-structure/SKILL.md
+#     design-detailed-methodology/SKILL.md
+#     assemble-proposal/SKILL.md
+#     scaffold-section/SKILL.md
+#     writing-time-mentor/SKILL.md
+#     compile-working-paper/SKILL.md
+#     socratic-probe/SKILL.md
+#     literature-synthesis/SKILL.md
+#
+# (begin-next-cycle and framing-for-competition are Tier 5 — not Cycle 1
+# critical path. Will be added in a later v0.x release before year 2.)

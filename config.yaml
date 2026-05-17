@@ -1,0 +1,78 @@
+# Project Mentor — Hermes profile configuration
+#
+# Part of the Hermes Research Curriculum at Bronx Science.
+# Authoritative source: https://github.com/ScottSavaiano/project-mentor
+#
+# This file is one of three distribution files that ship in the
+# project-mentor repository, alongside SOUL.md and distribution.yaml.
+# On `hermes profile update`, config.yaml is preserved by default (the
+# installer may have tuned it for their machine); pass --force-config
+# to reset it to the repo version.
+
+# -------------------------------------------------------------------
+# Main model
+# -------------------------------------------------------------------
+# The mentor handles the highest-judgment work in the program — research
+# problem identification, gap analysis, methodology design, the Socratic
+# stage-skills. This is the place we are willing to pay for capability.
+#
+# DEFAULT: Claude Opus 4.7 routed through OpenRouter.
+# NO automatic fallback. Judgment-heavy mentor work must not silently
+# degrade to a weaker model. If Opus is unavailable or hits a budget cap,
+# the student switches manually with the `/model` slash command — a
+# deliberate, conscious step. Skills may RECOMMEND elevation or
+# de-escalation at appropriate moments; the student acts. (See the
+# implementation plan, Phase 0, "Default model per profile.")
+
+model:
+  provider: openrouter
+  default: anthropic/claude-opus-4.7
+  base_url: ''
+  api_mode: chat_completions
+
+# -------------------------------------------------------------------
+# Auxiliary slots
+# -------------------------------------------------------------------
+# Hermes has eight auxiliary task slots (compression, vision, web extract,
+# title generation, session search, approval scoring, MCP tool routing,
+# skills search). Each defaults to `auto` — meaning "use the main model."
+#
+# Leaving these on `auto` keeps the v1 install simple and conservative.
+# These are plumbing tasks, not judgment work, so routing them to a
+# cheap flash model later (e.g., google/gemini-3-flash-preview for
+# title gen and compression) is a sensible cost-control move and does
+# NOT contradict the no-automatic-fallback principle above, which is
+# about the main reasoning model. Defer that tuning to a follow-up
+# release once per-student OpenRouter usage data exists.
+#
+# Auxiliary section omitted — Hermes treats unset auxiliary tasks as
+# `auto`, identical to writing each one explicitly.
+
+# -------------------------------------------------------------------
+# Terminal
+# -------------------------------------------------------------------
+# All three student-facing profiles (mentor, research, review) share a
+# single workspace at ~/research-curriculum/ on the student's machine,
+# set as `terminal.cwd`. This is the shared-workspace architecture: the
+# profiles are state-isolated (memory, sessions per profile) but
+# filesystem-shared. Knowledge transfer between agents happens through
+# the workspace files — `project_design.md`, `reference_articles.md`,
+# `paper_structure.md`, `decisions.md`, `working_paper.md`,
+# `project_paper_status.md`, and the `journals/` directory.
+#
+# On the `local` backend, `cwd: "."` means "the directory Hermes was
+# launched from" — NOT the profile directory. An explicit absolute path
+# is required.
+#
+# IMPORTANT: the value below is the documented intent. The student
+# install script (`student-install.sh`) rewrites this to the correct
+# absolute path on first install — typically
+# `/Users/<username>/research-curriculum` on macOS, or
+# `/home/<username>/research-curriculum` on Windows WSL2. The educator
+# can confirm whether Hermes expands the leading `~` itself on the
+# local backend; if it does, the install-time rewrite is belt-and-suspenders.
+
+terminal:
+  backend: local
+  cwd: ~/research-curriculum
+  timeout: 180
