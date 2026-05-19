@@ -21,7 +21,7 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.1.0
+version: 0.1.1
 
 description: |
   Project Mentor — high-judgment social science research mentor for

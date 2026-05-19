@@ -31,22 +31,88 @@ model:
   api_mode: chat_completions
 
 # -------------------------------------------------------------------
+# Model aliases
+# -------------------------------------------------------------------
+# Named shortcuts for the `/model <alias>` slash command in the TUI.
+# Students learn these in Lesson 5 ("Model Selection as a Methodological
+# Act") and use them through the cross-surface round-trip workflow:
+# `/model <alias> --global` in the TUI, restart gateway, refresh
+# OpenWebUI. (Plain `/model <alias>` without --global only swaps the
+# TUI's own session and does NOT change what OpenWebUI sees.)
+#
+# Vocabulary is deliberately methodological, not utilitarian. Names
+# describe what the STUDENT is doing — quick vs careful work — rather
+# than what the model is (cheap/fast/heavy). This reinforces the
+# lesson's framing: model selection is a methodological act, not an
+# optimization knob.
+#
+# The mentor offers two aliases:
+#   - `default` — Opus 4.7, the mentor's architectural default.
+#   - `quick`   — Haiku 4.5, for short low-stakes interactions like a
+#                 clarifying question or a quick lookup.
+#
+# The mentor does NOT offer `careful` because its default IS Opus, so
+# a separate `careful` alias would be redundant. The research and review
+# agents will include `careful` because their defaults are lighter; the
+# mentor's omission itself teaches an architectural fact.
+
+model_aliases:
+  default:
+    model: anthropic/claude-opus-4.7
+    provider: openrouter
+  quick:
+    model: anthropic/claude-haiku-4.5
+    provider: openrouter
+
+# -------------------------------------------------------------------
 # Auxiliary slots
 # -------------------------------------------------------------------
-# Hermes has eight auxiliary task slots (compression, vision, web extract,
-# title generation, session search, approval scoring, MCP tool routing,
-# skills search). Each defaults to `auto` — meaning "use the main model."
+# Hermes has eight auxiliary task slots — side-jobs the agent offloads
+# to a separate model. Each defaults to `auto` (use the main model).
 #
-# Leaving these on `auto` keeps the v1 install simple and conservative.
-# These are plumbing tasks, not judgment work, so routing them to a
-# cheap flash model later (e.g., google/gemini-3-flash-preview for
-# title gen and compression) is a sensible cost-control move and does
-# NOT contradict the no-automatic-fallback principle above, which is
-# about the main reasoning model. Defer that tuning to a follow-up
-# release once per-student OpenRouter usage data exists.
+# v0.1.1 cost-discipline decision: route the five mechanical slots to
+# Haiku 4.5; leave the three quality/safety-critical slots on auto so
+# they inherit the main reasoning model (Opus 4.7).
 #
-# Auxiliary section omitted — Hermes treats unset auxiliary tasks as
-# `auto`, identical to writing each one explicitly.
+# Routed to Haiku 4.5 (mechanical — Opus is overkill):
+#   - web_extract    — pulling structured content from fetched web pages
+#   - vision         — image / chart / OCR processing
+#   - session_search — full-text search over prior sessions
+#   - mcp            — auxiliary calls in the MCP path
+#   - skills_hub     — skill discovery and selection
+#
+# Left on auto (use Opus — the main reasoning model):
+#   - title       — chat session titles; the index for educator review
+#                   of student work in Sessions tab and OpenWebUI history.
+#   - compression — context summarization quality matters; bad
+#                   compression means the agent silently forgets earlier
+#                   conversation work mid-session.
+#   - approval    — safety-critical; judges whether agent-initiated
+#                   actions need user permission. Weaker model here has
+#                   real safety consequences.
+#
+# This is the standard pattern documented in the platform primer
+# Section 2; routing mechanical slots to a cheaper model is not
+# curriculum-specific. Cost savings on a 60-student cohort over an
+# academic year are meaningful, especially for web_extract and
+# session_search, which fire frequently.
+
+auxiliary:
+  web_extract:
+    provider: openrouter
+    model: anthropic/claude-haiku-4.5
+  vision:
+    provider: openrouter
+    model: anthropic/claude-haiku-4.5
+  session_search:
+    provider: openrouter
+    model: anthropic/claude-haiku-4.5
+  mcp:
+    provider: openrouter
+    model: anthropic/claude-haiku-4.5
+  skills_hub:
+    provider: openrouter
+    model: anthropic/claude-haiku-4.5
 
 # -------------------------------------------------------------------
 # Terminal
