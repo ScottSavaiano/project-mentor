@@ -8,114 +8,230 @@
 # On `hermes profile update`, config.yaml is preserved by default (the
 # installer may have tuned it for their machine); pass --force-config
 # to reset it to the repo version.
+#
+# Version 0.2.0 (2026-05-24): replaces v0.1.1's Opus-default-no-fallback
+# shape with the verified two-tier strategy from
+# `decision-history-and-rationale.md` Section 11 (rewritten 2026-05-24).
+# Default tier is Claude Haiku 4.5 (voice-tested as the strongest
+# SOUL-following model at the low end of the Anthropic family, auto-cached
+# by Hermes). Careful tier is Opus 4.7 (auto-cached, used for genuine
+# high-judgment moments via /model careful). Fallback is Gemma 4 26B
+# paid via DekaLLM (academia-tagged, ZDR-verified, voice-tested as a
+# close-second). All eight auxiliary slots route to Gemma 4 26B paid
+# to keep mechanical task costs low without dragging Haiku quality
+# upward when /model careful is invoked.
 
 # -------------------------------------------------------------------
-# Main model
+# Main model — default tier (Haiku 4.5)
 # -------------------------------------------------------------------
-# The mentor handles the highest-judgment work in the program — research
-# problem identification, gap analysis, methodology design, the Socratic
-# stage-skills. This is the place we are willing to pay for capability.
+# Default selection criterion for the MAIN model (decision-history
+# Section 11.1, 2026-05-24):
+# (1) acceptable privacy posture under the curriculum's OpenRouter
+# guardrails — specifically the no-train + no-publish account-wide filters
+# plus ZDR-verified provider routing; (2) voice that follows the mentor
+# SOUL's commitments (don't flatter, don't validate unearned, demonstration-
+# vs-production boundary, "ask the next useful question"); (3) reliable at
+# curriculum scale across ~150 student-years of usage; (4) auto-cached by
+# Hermes through OpenRouter (which requires a Claude-family model — see
+# `agent/agent_runtime_helpers.py:anthropic_prompt_cache_policy` in the
+# Hermes source).
 #
-# DEFAULT: Claude Opus 4.7 routed through OpenRouter.
-# NO automatic fallback. Judgment-heavy mentor work must not silently
-# degrade to a weaker model. If Opus is unavailable or hits a budget cap,
-# the student switches manually with the `/model` slash command — a
-# deliberate, conscious step. Skills may RECOMMEND elevation or
-# de-escalation at appropriate moments; the student acts. (See the
-# implementation plan, Phase 0, "Default model per profile.")
+# These four criteria govern the MAIN model only. The auxiliary slots
+# (further down this file) intentionally exempt the auto-caching criterion
+# because auxiliary tasks are short-lived and caching would not deliver
+# meaningful savings; the rest of the criteria still apply.
+#
+# Claude Haiku 4.5 satisfies all four. The voice test on 2026-05-24 against
+# the actual project-mentor SOUL placed Haiku 4.5 as the strongest of
+# Haiku-3 / Haiku-3.5 / Haiku-4.5 / Gemma-4-26B / gpt-oss-120b on every
+# prompt covering routine work, proposal review with weak elements,
+# integrity-boundary requests, and stuck-student Socratic moments. Older
+# Haiku variants slipped into flattery on routine prompts; gpt-oss-120b
+# violated the demonstration-vs-production boundary; Gemma was a defensible
+# close-second but lacks Hermes auto-caching.
+#
+# Posted pricing is uniform across Haiku 4.5's providers ($1.00/M input,
+# $5.00/M output, $0.10/M cache_read, $1.25/M cache_write). OpenRouter
+# routes among Amazon Bedrock, Google Vertex, and Anthropic direct — all
+# three are on OpenRouter's ZDR endpoint list and pass the curriculum's
+# guardrails. No provider pinning is required.
 
 model:
   provider: openrouter
-  default: anthropic/claude-opus-4.7
+  default: anthropic/claude-haiku-4.5
   base_url: ''
   api_mode: chat_completions
 
 # -------------------------------------------------------------------
-# Model aliases
+# Fallback model — single-shot rescue if default fails
+# -------------------------------------------------------------------
+# `fallback_model:` triggers once per session if the main model errors
+# (rate limit, server failure, auth issue), preserving conversation state.
+# This is a single safety net, not a cascade — see platform primer 8.4.
+#
+# Pick: Gemma 4 26B paid via OpenRouter. Three reasons.
+# (1) Different vendor chain from Anthropic — independent rate-limit
+# windows, so Haiku rate-limiting doesn't propagate to the fallback.
+# (2) Academia-tagged, ZDR-verified across all 8 providers on OpenRouter's
+# ZDR list, passes the curriculum's account guardrails.
+# (3) Voice-tested (2026-05-24) as a close-second to Haiku 4.5 — direct,
+# asks before answering on routine and Socratic prompts, strong on the
+# demonstration-vs-production boundary, slightly more curt than Haiku
+# but still SOUL-aligned.
+#
+# Provider routing note: Hermes's fallback_model schema only recognizes
+# `provider` and `model` fields (verified 2026-05-25 in
+# `agent/agent_init.py` and `hermes_cli/config.py`). OpenRouter's
+# request-level `provider: {order: [...]}` parameter is not exposed on
+# the fallback_model entry. So we cannot pin to DekaLLM (cheapest at
+# $0.06/M input) directly from this config; OpenRouter routes via its
+# standard provider preferences (uptime/latency/cost mix) across the
+# 8 ZDR-verified Gemma providers. The trade-off: marginal cost variance
+# ($0.06-$0.16/M input across providers) on what is a rare rescue path
+# in practice — acceptable. If the educator wants to pin a specific
+# provider later, the OpenRouter org admin surface allows shrinking the
+# allowed provider set for the whole organization, which Hermes inherits.
+
+fallback_model:
+  provider: openrouter
+  model: google/gemma-4-26b-a4b-it
+
+# -------------------------------------------------------------------
+# Model aliases — student vocabulary for /model
 # -------------------------------------------------------------------
 # Named shortcuts for the `/model <alias>` slash command in the TUI.
-# Students learn these in Lesson 5 ("Model Selection as a Methodological
-# Act") and use them through the cross-surface round-trip workflow:
-# `/model <alias> --global` in the TUI, restart gateway, refresh
-# OpenWebUI. (Plain `/model <alias>` without --global only swaps the
-# TUI's own session and does NOT change what OpenWebUI sees.)
+# Students learn these in Lesson 1 (the ten-command reference) and revisit
+# them in Lesson 6 ("Model Selection as a Methodological Act").
 #
-# Vocabulary is deliberately methodological, not utilitarian. Names
-# describe what the STUDENT is doing — quick vs careful work — rather
-# than what the model is (cheap/fast/heavy). This reinforces the
-# lesson's framing: model selection is a methodological act, not an
-# optimization knob.
+# Vocabulary is deliberately methodological, not utilitarian. The alias
+# names describe the work the STUDENT is doing — default vs careful —
+# rather than the model's brand or capability. This reinforces the
+# lesson framing: model selection is itself a methodological act, not a
+# cost-optimization knob.
 #
-# The mentor offers two aliases:
-#   - `default` — Opus 4.7, the mentor's architectural default.
-#   - `quick`   — Haiku 4.5, for short low-stakes interactions like a
-#                 clarifying question or a quick lookup.
+# Two aliases:
+#   - `default` — Haiku 4.5, the routine-work tier. Auto-cached.
+#   - `careful` — Opus 4.7, deliberate upgrade for genuine high-judgment
+#                 moments. Auto-cached (same Hermes Claude-on-OpenRouter
+#                 policy). The `model-escalation` skill prompts the
+#                 student to /model careful at a small named list of
+#                 moments (proposal review, methodology framing at
+#                 load-bearing decisions, gap identification, integrity
+#                 questions, substantive draft critique).
 #
-# The mentor does NOT offer `careful` because its default IS Opus, so
-# a separate `careful` alias would be redundant. The research and review
-# agents will include `careful` because their defaults are lighter; the
-# mentor's omission itself teaches an architectural fact.
+# After a /model careful upgrade, the student returns to the day-to-day
+# tier with `/model default` — covered in Lesson 1's reference card and
+# in every `model-escalation` recommendation's closing line.
 
 model_aliases:
   default:
-    model: anthropic/claude-opus-4.7
-    provider: openrouter
-  quick:
     model: anthropic/claude-haiku-4.5
+    provider: openrouter
+  careful:
+    model: anthropic/claude-opus-4.7
     provider: openrouter
 
 # -------------------------------------------------------------------
-# Auxiliary slots
+# Auxiliary task slots — all eight pinned to Gemma 4 26B paid
 # -------------------------------------------------------------------
 # Hermes has eight auxiliary task slots — side-jobs the agent offloads
-# to a separate model. Each defaults to `auto` (use the main model).
+# to a separate model. Each defaults to `auto` (inherit from main model).
 #
-# v0.1.1 cost-discipline decision: route the five mechanical slots to
-# Haiku 4.5; leave the three quality/safety-critical slots on auto so
-# they inherit the main reasoning model (Opus 4.7).
+# Hermes's auto-inheritance creates the Opus-bleed-up risk documented in
+# platform primer Section 8.3: when a student runs `/model careful` to
+# upgrade to Opus, all eight auxiliary tasks would silently start running
+# on Opus too unless explicitly pinned. Pinning prevents that bleed.
 #
-# Routed to Haiku 4.5 (mechanical — Opus is overkill):
-#   - web_extract    — pulling structured content from fetched web pages
-#   - vision         — image / chart / OCR processing
-#   - session_search — full-text search over prior sessions
-#   - mcp            — auxiliary calls in the MCP path
-#   - skills_hub     — skill discovery and selection
+# Curriculum choice: pin all eight to `google/gemma-4-26b-a4b-it` paid
+# via OpenRouter (DekaLLM provider, $0.06/M input). Reasons:
+# (1) Gemma 4 26B is cheap enough that running the eight mechanical slots
+# at curriculum scale (150 student-years) costs ~$30/year combined —
+# trivial against the school AI budget.
+# (2) ZDR-verified across all eight providers, academia-tagged,
+# voice-tested as competent for substantive prompts.
+# (3) NOT a Claude model, so it does NOT auto-cache via Hermes — but
+# auxiliary tasks are short-lived (skill discovery, web extraction,
+# compression), so caching would not deliver meaningful savings anyway.
+# (4) Different model family from the main tiers (Haiku/Opus) — keeps
+# the curriculum's cost-attribution clean: main-tier conversation traffic
+# vs mechanical-side traffic show up as distinct lines on OpenRouter's
+# usage analytics.
 #
-# Left on auto (use Opus — the main reasoning model):
-#   - title       — chat session titles; the index for educator review
-#                   of student work in Sessions tab and OpenWebUI history.
-#   - compression — context summarization quality matters; bad
-#                   compression means the agent silently forgets earlier
-#                   conversation work mid-session.
-#   - approval    — safety-critical; judges whether agent-initiated
-#                   actions need user permission. Weaker model here has
-#                   real safety consequences.
-#
-# This is the standard pattern documented in the platform primer
-# Section 2; routing mechanical slots to a cheaper model is not
-# curriculum-specific. Cost savings on a 60-student cohort over an
-# academic year are meaningful, especially for web_extract and
-# session_search, which fire frequently.
+# Platform primer Section 8.3 documents the three quality-sensitive slots
+# (`approval`, `compression`, `title`) for which a weaker model carries
+# real cost. The 2026-05-24 voice test established that Gemma 4 26B is
+# competent on substantive prompts; the educator can revisit these three
+# slots specifically if calibration ever shows quality drift.
 
 auxiliary:
   web_extract:
     provider: openrouter
-    model: anthropic/claude-haiku-4.5
+    model: google/gemma-4-26b-a4b-it
   vision:
     provider: openrouter
-    model: anthropic/claude-haiku-4.5
+    model: google/gemma-4-26b-a4b-it
   session_search:
     provider: openrouter
-    model: anthropic/claude-haiku-4.5
+    model: google/gemma-4-26b-a4b-it
   mcp:
     provider: openrouter
-    model: anthropic/claude-haiku-4.5
+    model: google/gemma-4-26b-a4b-it
   skills_hub:
     provider: openrouter
-    model: anthropic/claude-haiku-4.5
+    model: google/gemma-4-26b-a4b-it
+  title:
+    provider: openrouter
+    model: google/gemma-4-26b-a4b-it
+  compression:
+    provider: openrouter
+    model: google/gemma-4-26b-a4b-it
+  approval:
+    provider: openrouter
+    model: google/gemma-4-26b-a4b-it
 
 # -------------------------------------------------------------------
-# Terminal
+# Prompt caching — 1-hour TTL applied to all Claude calls
+# -------------------------------------------------------------------
+# Hermes auto-enables Anthropic prompt caching for Claude models routed
+# through OpenRouter (verified by source inspection 2026-05-24 in
+# `agent/agent_runtime_helpers.py:anthropic_prompt_cache_policy`).
+# Strategy is `system_and_3`: cache_control breakpoints on system prompt
+# + last 3 non-system messages. Both Haiku 4.5 (default tier) and
+# Opus 4.7 (careful tier) are auto-cached on every call.
+#
+# Empirical verification (2026-05-24): with ~13K-token system prompt on
+# Opus 4.7 through OpenRouter, cache-read calls cost 84% less than
+# baseline ($0.062 → $0.010). For Haiku 4.5 at the curriculum's typical
+# session shape (10K prompt, 500 completion, 10 turns), cached-effective
+# cost per session is ~$0.047 vs ~$0.125 uncached.
+#
+# TTL options are `"5m"` (Anthropic default) or `"1h"`. The 1h tier costs
+# 2× the base prompt rate on cache write (vs 1.25× for 5m) but amortizes
+# across sessions with thinking pauses longer than 5 minutes. Curriculum
+# sessions routinely have such pauses (Socratic prompting, looking up
+# references, switching to other applications). Setting 1h.
+#
+# Scope note: `prompt_caching.cache_ttl` is a top-level config field, so
+# it applies to every Claude call regardless of alias — both the default
+# tier (Haiku 4.5) and the careful tier (Opus 4.7) pay the 2× write
+# premium per cache breakpoint. For Haiku 4.5 at $1.25/M cache_write,
+# that's roughly $0.0125 per cached system prompt per session — at
+# 150 student-years × ~90 sessions/year, roughly $170/year for the
+# curriculum to pay this write premium on the default tier specifically
+# (vs the 1.25× 5m-TTL alternative on Haiku alone). Hermes does not
+# currently expose per-alias TTL overrides; if it ever does, the
+# default tier could drop to 5m TTL while the careful tier keeps 1h.
+# Until then, the curriculum accepts the modest write premium on the
+# default tier as the cost of clean cross-tier behavior.
+#
+# Hermes prints `💾 Prompt caching: ENABLED (auto, 1h TTL)` at session
+# start so the student can see it active.
+
+prompt_caching:
+  cache_ttl: "1h"
+
+# -------------------------------------------------------------------
+# Terminal — shared workspace
 # -------------------------------------------------------------------
 # All three student-facing profiles (mentor, research, review) share a
 # single workspace at ~/research-curriculum/ on the student's machine,
@@ -130,15 +246,19 @@ auxiliary:
 # launched from" — NOT the profile directory. An explicit absolute path
 # is required.
 #
-# IMPORTANT: the value below is the documented intent. The student
-# install script (`student-install.sh`) rewrites this to the correct
-# absolute path on first install — typically
+# IMPORTANT: the shipped value below is a CHANGE_ME placeholder, not a
+# usable path. The student install script (`student-install.sh`) rewrites
+# this to the correct absolute path on first install — typically
 # `/Users/<username>/research-curriculum` on macOS, or
-# `/home/<username>/research-curriculum` on Windows WSL2. The educator
-# can confirm whether Hermes expands the leading `~` itself on the
-# local backend; if it does, the install-time rewrite is belt-and-suspenders.
+# `/home/<username>/research-curriculum` on Windows. Shipping a CHANGE_ME
+# rather than `~/research-curriculum` is deliberate: it fails loudly if
+# anyone runs Hermes against this config directly from a clone without
+# going through the install script (which would otherwise silently write
+# workspace files to whatever directory Hermes was launched from, since
+# `cwd: "."` is the local-backend default for unset values and `~` is
+# not reliably expanded by Hermes on every platform).
 
 terminal:
   backend: local
-  cwd: ~/research-curriculum
+  cwd: /CHANGE_ME/research-curriculum
   timeout: 180
