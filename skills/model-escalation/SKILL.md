@@ -5,6 +5,9 @@ description: Recognize when a mentor conversation has entered a genuine high-jud
 
 # Model Escalation
 
+**Last edited:** 2026-05-26 (educator — refinements to default-tier identifier (Haiku 4.5) and downstream language; original Cowork draft 2026-05-22)
+*Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
+
 ## What this skill is
 
 This skill is a **meta-policy**. It does not handle a research stage on its own. It carries the curriculum's rule for **when to recommend a model upgrade** to the student, and it carries the language the mentor uses to deliver that recommendation.

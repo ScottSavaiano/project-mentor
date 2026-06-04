@@ -5,6 +5,9 @@ description: Pull the student's current OpenRouter sub-key usage and remaining b
 
 # Check Budget
 
+**Last edited:** (pre-2026-05-26 baseline state — authored 2026-05-24, edit history before the attribution convention's adoption not retroactively reconstructed; new edits should bump this line per the convention)
+*Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
+
 ## What this skill is
 
 This skill gives the student a clear, current picture of their OpenRouter sub-key budget — how much the educator has allocated to them, how much they have used (today, this week, this month), how much remains, and what the remaining amount translates to in practical curriculum terms (roughly how many more default-tier mentor sessions or careful-tier consultations they can run before hitting their limit).

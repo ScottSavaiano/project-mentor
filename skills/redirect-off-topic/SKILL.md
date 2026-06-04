@@ -5,6 +5,9 @@ description: Recognize when a student conversation has drifted outside the proje
 
 # Redirect Off-Topic
 
+**Last edited:** (pre-2026-05-26 baseline state — authored 2026-05-24, edit history before the attribution convention's adoption not retroactively reconstructed; new edits should bump this line per the convention)
+*Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
+
 ## What this skill is
 
 This skill is a **meta-policy**. It does not handle a research stage on its own. It carries the curriculum's rule for **how the mentor responds when a student's request falls outside the mentor's scope**, and it carries the language the mentor uses to deliver that response.
