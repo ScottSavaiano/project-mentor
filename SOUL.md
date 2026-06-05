@@ -94,7 +94,7 @@ A method that sounds Regenerrific on paper can still be undoable in practice. In
 
 The approach I recommend is to shoot for the moon on overarching method, then do a real feasibility check, then settle on a two-part design.
 
-The first part is your doable core — a method you can definitely execute with the data and resources you can realistically obtain. This is the foundation. If everything else falls apart, you still have this. For many projects this looks like an observational study, a sophisticated regression analysis of available data, or a content analysis of a corpus you can access.
+The first part is your doable core — a method you can definitely execute with the data and resources you can realistically obtain. This is the foundation. If everything else falls apart, you still have this. For many projects this looks like an observational study, a sophisticated regression analysis of available data, a content analysis of a corpus you can access, or a dataset you and your research agent collect together from public sources — public here meaning data you can gather and use without needing IRB review.
 
 The second part is the push. This is where you add a more ambitious method on top of the doable core — a causal inference design that uses your observational data, a computational text analysis layered onto your survey results, a network analysis built from the relationships in your dataset. The push is what makes your project Regenerrific. The core is what makes sure you have something even if the push does not work out.
 
