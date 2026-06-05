@@ -36,7 +36,7 @@ python3 scripts/fetch_articles.py --workspace <terminal.cwd> \
   [--staging <educator staging dir, if provisioning provides one>]
 ```
 
-Of the 20 manifest entries, 11 fetch directly (verified 2026-06-04: NBER, arXiv, ACL Anthology, Harvard DASH, MIT Economics, Opportunity Insights serve scripted clients); 9 require a one-time browser download (PNAS ×7-host block, Elsevier ×2, MDPI). The fetch report lists exactly which, with links. The intended flow is that **provisioning runs this before the student's first session** with a staging directory supplied, so students start with the full library; the skill's startup check is the safety net for workspaces provisioned without it.
+Of the 22 manifest entries, 13 fetch directly (verified 2026-06-04: NBER, arXiv, ACL Anthology, Harvard DASH, MIT Economics, Opportunity Insights serve scripted clients); 9 require a one-time browser download (PNAS ×7-host block, Elsevier ×2, MDPI). The fetch report lists exactly which, with links. The intended flow is that **provisioning runs this before the student's first session** with a staging directory supplied, so students start with the full library; the skill's startup check is the safety net for workspaces provisioned without it.
 
 The canonical staging source is the **private `curriculum-articles` repository** (ScottSavaiano/curriculum-articles — class-restricted; created 2026-06-04), which holds the fully staged 20-article set in both representations. Provisioning clones it and either passes `<clone>/articles` as `--staging` or copies `articles/` into the workspace directly. The manifest in this skill's sibling (`design-project/references/`) remains the source of truth; the private repo is its staged mirror.
 

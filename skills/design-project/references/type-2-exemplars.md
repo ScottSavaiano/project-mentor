@@ -1,6 +1,6 @@
 # Type 2 Baked-In Exemplars — Method-Approach Reference Articles
 
-**Last edited:** 2026-06-04 (Cowork — first draft; all access links verified full-text-accessible 2026-06-04. Second edit same day: Autor, Dorn & Hanson added as item 4's second exemplar per educator review, bringing econometrics to parity with the other items)
+**Last edited:** 2026-06-04 (Cowork — first draft; all access links verified full-text-accessible 2026-06-04. Second edit same day: Autor, Dorn & Hanson added to item 4 per educator review. Third edit same day: item 12 "Generative agent-based social simulation" added per the educator-approved menu addition — Park et al. 2023 + OASIS exemplars; the off-menu catch-all renumbered to 13)
 *Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
 
 **Status: Draft, awaiting educator review.** Resolves `design-project` open authoring item 1 (separate-file option, per the volume reasoning recorded there). Authored against architecture spec §2 (Type 2 definition), decision-history §6.1 (the menu), and the Regenerrific Methods Menu document (the mentor's own teaching descriptions).
@@ -119,9 +119,19 @@ Access: https://arxiv.org/abs/2301.07543 (open access)
 Fine-tunes GPT-2 separately on tweets from committed Republican and Democratic partisans, then probes both models with ANES survey questions — the fine-tuned models' "opinions" track the real groups' survey responses. A strong exemplar of exactly what the menu item describes: training on a corpus you can isolate along a dimension, then studying how the model's behavior changes. Feasible at student scale (GPT-2-sized models, public code).
 Access: https://aclanthology.org/2022.coling-1.593/ (ACL Anthology, open access) · backup: https://arxiv.org/abs/2209.07065
 
-## 12. Other current approaches at the edge of the field
+## 12. Generative agent-based social simulation
 
-**No baked-in exemplars — by design.** Per `design-project`'s off-menu edge case and decision-history §6.1, Type 2 articles for an off-menu approach come from a literature search with the student, not from this file; the literature review (cycle-template stage 7) is the natural place they surface. This entry exists so the file's coverage of the menu is explicit: eleven items carry baked-in exemplars; the twelfth deliberately does not.
+**Park, O'Brien, Cai, Morris, Liang & Bernstein (2023). "Generative Agents: Interactive Simulacra of Human Behavior." *UIST 2023*.**
+The paper that launched generative agents: twenty-five LLM agents with memory, reflection, and planning inhabit a small simulated town, and social behavior — party invitations spreading, relationships forming — *emerges* rather than being scripted. A strong exemplar of the paradigm's core claim and its core obligation: the believability evaluation is the part a student should study hardest, because validation is this method's hard problem.
+Access: https://arxiv.org/abs/2304.03442 (open access)
+
+**Yang et al. (2024). "OASIS: Open Agent Social Interaction Simulations with One Million Agents." (CAMEL-AI.)**
+A social-media simulator — dynamic networks, recommendation systems, posting and commenting agents — scalable from hundreds to a million agents, used to reproduce phenomena like information spread and group polarization. A strong exemplar of the system-level form of the method (and the open-source engine behind tools like MiroFish, which is the instrument a student's stretch version might actually run on). Scale-versus-cost is the design lesson: every agent and round is spend.
+Access: https://arxiv.org/abs/2411.11581 (open access)
+
+## 13. Other current approaches at the edge of the field
+
+**No baked-in exemplars — by design.** Per `design-project`'s off-menu edge case and decision-history §6.1, Type 2 articles for an off-menu approach come from a literature search with the student, not from this file; the literature review (cycle-template stage 7) is the natural place they surface. This entry exists so the file's coverage of the menu is explicit: twelve items carry baked-in exemplars; the thirteenth (this catch-all) deliberately does not.
 
 ---
 

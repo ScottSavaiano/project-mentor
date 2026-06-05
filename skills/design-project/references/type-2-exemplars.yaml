@@ -137,3 +137,15 @@ articles:
     fetch: script
     url: https://aclanthology.org/2022.coling-1.593.pdf
     backup_url: https://arxiv.org/pdf/2209.07065
+
+  - slug: park-2023
+    citation: "Park, O'Brien, Cai, Morris, Liang & Bernstein (2023). Generative Agents: Interactive Simulacra of Human Behavior. UIST 2023."
+    menu_items: [12]
+    fetch: script
+    url: https://arxiv.org/pdf/2304.03442
+
+  - slug: oasis-2024
+    citation: "Yang et al. (2024). OASIS: Open Agent Social Interaction Simulations with One Million Agents. CAMEL-AI."
+    menu_items: [12]
+    fetch: script
+    url: https://arxiv.org/pdf/2411.11581
