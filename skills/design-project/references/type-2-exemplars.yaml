@@ -1,0 +1,139 @@
+# Type 2 Exemplars — machine-readable manifest
+# Consumed by the fetch-articles skill (scripts/fetch_articles.py).
+# The prose companion (type-2-exemplars.md, same directory) is the mentor-facing
+# source of truth for annotations; this file carries only what fetching needs.
+#
+# fetch: script  -> the URL serves PDFs to non-browser clients (verified 2026-06-04)
+# fetch: browser -> the host blocks scripted clients; a human downloads via the URL
+#                   into the staging directory as <slug>.pdf (see fetch-articles SKILL.md)
+#
+# Last verified: 2026-06-04 (Cowork — every fetch:script URL tested with a scripted
+# client; every fetch:browser URL verified reachable in a browser context)
+
+articles:
+  - slug: gimbrone-2022
+    citation: "Gimbrone, Bates, Prins & Keyes (2022). The politics of depression. SSM - Mental Health 2, 100043."
+    menu_items: [1]
+    fetch: browser
+    url: https://www.sciencedirect.com/science/article/pii/S2666560321000438
+    backup_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC8713953/
+
+  - slug: rohrer-2015
+    citation: "Rohrer, Egloff & Schmukle (2015). Examining the effects of birth order on personality. PNAS 112(46)."
+    menu_items: [1]
+    fetch: browser
+    url: https://www.pnas.org/doi/10.1073/pnas.1506451112
+
+  - slug: card-krueger-1994
+    citation: "Card & Krueger (1994). Minimum Wages and Employment. AER 84(4). NBER WP 4509 version."
+    menu_items: [2]
+    fetch: script
+    url: https://www.nber.org/system/files/working_papers/w4509/w4509.pdf
+
+  - slug: abadie-2010
+    citation: "Abadie, Diamond & Hainmueller (2010). Synthetic Control Methods for Comparative Case Studies. JASA 105(490). NBER WP 12831 version."
+    menu_items: [2]
+    fetch: script
+    url: https://www.nber.org/system/files/working_papers/w12831/w12831.pdf
+    backup_url: https://www.law.upenn.edu/live/files/8950-abadie2010pdf
+
+  - slug: felitti-1998
+    citation: "Felitti et al. (1998). The Adverse Childhood Experiences (ACE) Study. Am J Prev Med 14(4)."
+    menu_items: [3]
+    fetch: browser
+    url: https://www.ajpmonline.org/article/S0749-3797(98)00017-8/fulltext
+
+  - slug: case-deaton-2015
+    citation: "Case & Deaton (2015). Rising morbidity and mortality in midlife among white non-Hispanic Americans. PNAS 112(49)."
+    menu_items: [3]
+    fetch: browser
+    url: https://www.pnas.org/doi/10.1073/pnas.1518393112
+
+  - slug: chetty-hendren-2018a
+    citation: "Chetty & Hendren (2018). The Impacts of Neighborhoods on Intergenerational Mobility I. QJE 133(3)."
+    menu_items: [4]
+    fetch: script
+    url: https://opportunityinsights.org/wp-content/uploads/2018/10/nbhds_paper.pdf
+    backup_url: https://scholar.harvard.edu/files/hendren/files/nbhds_paper.pdf
+
+  - slug: autor-dorn-hanson-2013
+    citation: "Autor, Dorn & Hanson (2013). The China Syndrome. AER 103(6)."
+    menu_items: [4]
+    fetch: script
+    url: "https://economics.mit.edu/sites/default/files/publications/the%20china%20syndrome%202013.pdf"
+    backup_url: https://www.nber.org/system/files/working_papers/w18054/w18054.pdf
+
+  - slug: bertrand-mullainathan-2004
+    citation: "Bertrand & Mullainathan (2004). Are Emily and Greg More Employable Than Lakisha and Jamal? AER 94(4). NBER WP 9873 version."
+    menu_items: [5]
+    fetch: script
+    url: https://www.nber.org/system/files/working_papers/w9873/w9873.pdf
+
+  - slug: paluck-2016
+    citation: "Paluck, Shepherd & Aronow (2016). Changing climates of conflict. PNAS 113(3)."
+    menu_items: [5, 8]
+    fetch: browser
+    url: https://www.pnas.org/doi/10.1073/pnas.1514483113
+
+  - slug: salganik-2020
+    citation: "Salganik et al. (2020). Measuring the predictability of life outcomes with a scientific mass collaboration. PNAS 117(15)."
+    menu_items: [6]
+    fetch: browser
+    url: https://www.pnas.org/doi/10.1073/pnas.1915006117
+
+  - slug: kosinski-2013
+    citation: "Kosinski, Stillwell & Graepel (2013). Private traits and attributes are predictable from digital records. PNAS 110(15)."
+    menu_items: [6]
+    fetch: browser
+    url: https://www.pnas.org/doi/10.1073/pnas.1218772110
+
+  - slug: garg-2018
+    citation: "Garg, Schiebinger, Jurafsky & Zou (2018). Word embeddings quantify 100 years of gender and ethnic stereotypes. PNAS 115(16). arXiv version fetched; published version free to read at PNAS."
+    menu_items: [7]
+    fetch: script
+    url: https://arxiv.org/pdf/1711.08412
+    reading_url: https://www.pnas.org/doi/10.1073/pnas.1720347115
+
+  - slug: voigt-2017
+    citation: "Voigt et al. (2017). Language from police body camera footage shows racial disparities in officer respect. PNAS 114(25)."
+    menu_items: [7]
+    fetch: browser
+    url: https://www.pnas.org/doi/10.1073/pnas.1702413114
+
+  - slug: christakis-fowler-2007
+    citation: "Christakis & Fowler (2007). The Spread of Obesity in a Large Social Network over 32 Years. NEJM 357. Harvard DASH copy."
+    menu_items: [8]
+    fetch: script
+    url: https://dash.harvard.edu/bitstream/handle/1/3710802/Christakis_SpreadofObesity.pdf
+
+  - slug: hoffman-2020
+    citation: "Hoffman, Shandas & Pendleton (2020). The Effects of Historical Housing Policies on Resident Exposure to Intra-Urban Heat. Climate 8(1)."
+    menu_items: [9]
+    fetch: browser
+    url: https://www.mdpi.com/2225-1154/8/1/12
+
+  - slug: chetty-hendren-2018b
+    citation: "Chetty & Hendren (2018). The Impacts of Neighborhoods on Intergenerational Mobility II: County-Level Estimates. QJE 133(3)."
+    menu_items: [9]
+    fetch: script
+    url: https://economics.mit.edu/sites/default/files/inline-files/movers_paper2_1.pdf
+
+  - slug: argyle-2023
+    citation: "Argyle et al. (2023). Out of One, Many: Using Language Models to Simulate Human Samples. Political Analysis 31(3). arXiv version fetched; published version OA at Cambridge."
+    menu_items: [10]
+    fetch: script
+    url: https://arxiv.org/pdf/2209.06899
+    reading_url: https://www.cambridge.org/core/journals/political-analysis/article/out-of-one-many-using-language-models-to-simulate-human-samples/035D7C8A55B237942FB6DBAD7CAA4E49
+
+  - slug: horton-2023
+    citation: "Horton (2023). Large Language Models as Simulated Economic Agents. arXiv:2301.07543."
+    menu_items: [10]
+    fetch: script
+    url: https://arxiv.org/pdf/2301.07543
+
+  - slug: jiang-2022
+    citation: "Jiang, Beeferman, Roy & Roy (2022). CommunityLM: Probing Partisan Worldviews from Language Models. COLING 2022."
+    menu_items: [11]
+    fetch: script
+    url: https://aclanthology.org/2022.coling-1.593.pdf
+    backup_url: https://arxiv.org/pdf/2209.07065
