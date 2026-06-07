@@ -1,6 +1,6 @@
-# Type 2 Exemplars — machine-readable manifest
+# Method Exemplar Articles — machine-readable manifest
 # Consumed by the fetch-articles skill (scripts/fetch_articles.py).
-# The prose companion (type-2-exemplars.md, same directory) is the mentor-facing
+# The prose companion (method-exemplars.md, same directory) is the mentor-facing
 # source of truth for annotations; this file carries only what fetching needs.
 #
 # fetch: script  -> the URL serves PDFs to non-browser clients (verified 2026-06-04)

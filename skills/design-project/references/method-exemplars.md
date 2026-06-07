@@ -1,17 +1,17 @@
-# Type 2 Baked-In Exemplars — Method-Approach Reference Articles
+# Method Exemplar Articles — the Baked-In Method-Approach Set
 
 **Last edited:** 2026-06-04 (Cowork — first draft; all access links verified full-text-accessible 2026-06-04. Second edit same day: Autor, Dorn & Hanson added to item 4 per educator review. Third edit same day: item 12 "Generative agent-based social simulation" added per the educator-approved menu addition — Park et al. 2023 + OASIS exemplars; the off-menu catch-all renumbered to 13)
 *Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
 
-**Status: Draft, awaiting educator review.** Resolves `design-project` open authoring item 1 (separate-file option, per the volume reasoning recorded there). Authored against architecture spec §2 (Type 2 definition), decision-history §6.1 (the menu), and the Regenerrific Methods Menu document (the mentor's own teaching descriptions).
+**Status: Draft, awaiting educator review.** Resolves `design-project` open authoring item 1 (separate-file option, per the volume reasoning recorded there). Authored against architecture spec §2 (the Method Exemplar Articles definition), decision-history §6.1 (the menu), and the Regenerrific Methods Menu document (the mentor's own teaching descriptions).
 
 ## How this file is used
 
-This file is the data behind `design-project` Phase 3f. When a method-approach from the Regenerrific menu is being seriously considered, the mentor surfaces that approach's 1–2 exemplar articles below as part of teaching the menu item — per architecture spec §2, "surfaced as part of the mentor's teaching during the menu walkthrough." When the student selects an approach, its exemplars are inherited into `reference_articles.md` as the cycle's Type 2 articles.
+This file is the data behind `design-project` Phase 3f. When a method-approach from the Regenerrific menu is being seriously considered, the mentor surfaces that approach's 1–2 exemplar articles below as part of teaching the menu item — per architecture spec §2, "surfaced as part of the mentor's teaching during the menu walkthrough." When the student selects an approach, its exemplars are inherited into `reference_articles.md` as the cycle's Method Exemplar Articles.
 
 Every article here is **full-text accessible without an institutional login** — each entry carries a primary access link and, where one exists, a stable backup. Accessibility was verified 2026-06-04; the access links should be re-verified when this file is next revised (link rot is the maintenance risk of a baked-in set).
 
-This file has a machine-readable companion, `type-2-exemplars.yaml` (same directory), consumed by the `fetch-articles` skill to pre-stage local copies of all exemplars in the student's workspace (`articles/<slug>.pdf` + `articles/text/<slug>.md`) at provisioning or first project startup. Keep the two files in step: an exemplar change here is a manifest change there.
+This file has a machine-readable companion, `method-exemplars.yaml` (same directory), consumed by the `fetch-articles` skill to pre-stage local copies of all exemplars in the student's workspace (`articles/<slug>.pdf` + `articles/text/<slug>.md`) at provisioning or first project startup. Keep the two files in step: an exemplar change here is a manifest change there.
 
 **A note on weight.** Several exemplars study heavy subjects — childhood abuse (Felitti), racial discrimination (Bertrand & Mullainathan; Voigt), midlife mortality (Case & Deaton). This is unavoidable in a set meant to show social science methods doing real work, and these topics may connect to students' lived experience. The mentor's acknowledgment rule (decision-history §3.3; `design-project` edge cases) applies when surfacing them.
 
@@ -131,7 +131,7 @@ Access: https://arxiv.org/abs/2411.11581 (open access)
 
 ## 13. Other current approaches at the edge of the field
 
-**No baked-in exemplars — by design.** Per `design-project`'s off-menu edge case and decision-history §6.1, Type 2 articles for an off-menu approach come from a literature search with the student, not from this file; the literature review (cycle-template stage 7) is the natural place they surface. This entry exists so the file's coverage of the menu is explicit: twelve items carry baked-in exemplars; the thirteenth (this catch-all) deliberately does not.
+**No baked-in exemplars — by design.** Per `design-project`'s off-menu edge case and decision-history §6.1, Method exemplars for an off-menu approach come from a literature search with the student, not from this file; the literature review (cycle-template stage 7) is the natural place they surface. This entry exists so the file's coverage of the menu is explicit: twelve items carry baked-in exemplars; the thirteenth (this catch-all) deliberately does not.
 
 ---
 

@@ -99,7 +99,7 @@ env_requires:
 #                                        # stages reference articles locally,
 #                                        # PDF + extracted text; see the private
 #                                        # curriculum-articles repo for the
-#                                        # staged Type 2 exemplar set
+#                                        # staged method-exemplar set
 #
 # (begin-next-cycle and framing-for-competition are Tier 5 — not Cycle 1
 # critical path. Will be added in a later v0.x release before year 2.)

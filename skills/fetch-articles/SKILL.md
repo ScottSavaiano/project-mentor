@@ -1,11 +1,11 @@
 ---
 name: fetch-articles
-description: Fetches reference articles into the shared workspace and extracts agent-readable text versions. Fires at first project startup to pre-stage the Type 2 exemplar library from the design-project manifest; fires on request whenever a reference article (any type) should be saved locally — the student supplies a URL, or drops a legitimately obtained PDF into articles/ for text extraction. Never circumvents paywalls; hosts that block scripted clients are reported with the link for a human browser download.
+description: Fetches reference articles into the shared workspace and extracts agent-readable text versions. Fires at first project startup to pre-stage the method-exemplar library from the design-project manifest; fires on request whenever a reference article (any type) should be saved locally — the student supplies a URL, or drops a legitimately obtained PDF into articles/ for text extraction. Never circumvents paywalls; hosts that block scripted clients are reported with the link for a human browser download.
 ---
 
 # Fetch Articles
 
-**Last edited:** 2026-06-04 (Cowork — first draft; script tested end-to-end against all 20 manifest entries same day)
+**Last edited:** 2026-06-06 (Cowork — numeric "Type N" reference-article labels retired per the educator nomenclature ruling of this date; practical names throughout: Research Problem / Method Exemplar / Project Reference / Paper Structure Articles). Prior: 2026-06-04 (Cowork — first draft; script tested end-to-end against all 20 manifest entries same day)
 *Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
 
 **Status: Draft, awaiting educator review.** Authored against decision-log entry 2026-06-04 ("Local article staging"), architecture spec §2 (reference-articles typology) and §11 (workspace files), and `design-project` Phase 3f.
@@ -14,7 +14,7 @@ description: Fetches reference articles into the shared workspace and extracts a
 
 `fetch-articles` maintains the workspace's local article library: canonical PDFs for the student and teacher to read, and extracted text versions for the agents to search and quote. It exists because reference articles do their work only when they are actually present — the mentor teaches from them, the research agent mines them during literature synthesis, the review agent checks claims against them, and the student learns published-paper craft by reading them.
 
-The skill is deliberately general. Its first job is pre-staging the Type 2 exemplar library at project startup, but the same mechanism serves any reference article the student selects across the project — Type 1 framing articles, Type 3 consolidations, Type 4 paper-structure models.
+The skill is deliberately general. Its first job is pre-staging the method-exemplar library at project startup, but the same mechanism serves any reference article the student selects across the project — Research Problem Articles, Project Reference Articles consolidations, Paper Structure Reference Articles.
 
 ## Workspace layout
 
@@ -28,11 +28,11 @@ The PDF is always canonical. The `.md` extraction is a retrieval surface — its
 
 ## When this skill fires
 
-**1. First project startup (exemplar pre-staging).** When the workspace's `articles/` directory does not yet contain the Type 2 exemplar library, run the script in manifest mode against the `design-project` manifest:
+**1. First project startup (exemplar pre-staging).** When the workspace's `articles/` directory does not yet contain the method-exemplar library, run the script in manifest mode against the `design-project` manifest:
 
 ```
 python3 scripts/fetch_articles.py --workspace <terminal.cwd> \
-  --manifest ../design-project/references/type-2-exemplars.yaml \
+  --manifest ../design-project/references/method-exemplars.yaml \
   [--staging <educator staging dir, if provisioning provides one>]
 ```
 
@@ -40,7 +40,7 @@ Of the 22 manifest entries, 13 fetch directly (verified 2026-06-04: NBER, arXiv,
 
 The canonical staging source is the **private `curriculum-articles` repository** (ScottSavaiano/curriculum-articles — class-restricted; created 2026-06-04), which holds the fully staged 20-article set in both representations. Provisioning clones it and either passes `<clone>/articles` as `--staging` or copies `articles/` into the workspace directly. The manifest in this skill's sibling (`design-project/references/`) remains the source of truth; the private repo is its staged mirror.
 
-**2. On request, for any article.** When a conversation settles on a reference article worth keeping locally — a Type 1 article during research-problem framing, a Type 4 structure model — and a full-text-accessible URL is in hand:
+**2. On request, for any article.** When a conversation settles on a reference article worth keeping locally — a Research Problem Article during research-problem framing, a Paper Structure Reference Article — and a full-text-accessible URL is in hand:
 
 ```
 python3 scripts/fetch_articles.py --workspace <terminal.cwd> \
@@ -64,11 +64,11 @@ This skill **never circumvents paywalls or access controls.** A 403 from a host 
 - Extraction tooling: the script prefers poppler's `pdftotext` (fast C implementation; handles graphics-heavy PDFs that stall pure-Python extractors — two of the PNAS exemplars hung both pdfminer.six and pypdf for minutes, while pdftotext finished in seconds) and falls back to `pdfminer.six` (`pip install pdfminer.six`) where poppler is absent. The script degrades gracefully with neither (PDFs fetch; extraction reports the missing tooling).
 - Idempotent: existing PDFs are skipped unless `--force`. Re-running after a browser download completes the picture; the report regenerates each run.
 - Extraction of two-column academic layouts is serviceable, not beautiful — adequate for search and quoting. Image-only/scanned PDFs are flagged (<500 extracted chars).
-- The Type 2 manifest (`../design-project/references/type-2-exemplars.yaml`) is owned by `design-project`; when its exemplars change, re-run manifest mode — new slugs fetch, existing ones skip.
+- The method-exemplar manifest (`../design-project/references/method-exemplars.yaml`) is owned by `design-project`; when its exemplars change, re-run manifest mode — new slugs fetch, existing ones skip.
 
 ## Where this skill lives in the architecture
 
-A **supporting skill** of the project-mentor profile, bundled (registered in `.bundled_manifest`), curator-immune and update-refreshed per platform primer §7. It is the operational half of the Type 2 design: `design-project` owns the exemplar *content* (what the articles are, why they exemplify); `fetch-articles` owns their *presence* (getting them onto disk in both representations). The research and review agents read `articles/` through the shared workspace; per the decision-log entry, if those agents later need fetch capability of their own, this skill ships in their profiles too rather than being reimplemented.
+A **supporting skill** of the project-mentor profile, bundled (registered in `.bundled_manifest`), curator-immune and update-refreshed per platform primer §7. It is the operational half of the method-exemplar design: `design-project` owns the exemplar *content* (what the articles are, why they exemplify); `fetch-articles` owns their *presence* (getting them onto disk in both representations). The research and review agents read `articles/` through the shared workspace; per the decision-log entry, if those agents later need fetch capability of their own, this skill ships in their profiles too rather than being reimplemented.
 
 ## Status
 
