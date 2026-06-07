@@ -51,7 +51,7 @@ Dispatched by `project-walkthrough` at `cycle_template_stage = 10`, or on resump
 
 ## The scripted moments
 
-Per the established convention: adapt wording and re-point examples to the student's project; preserve the core moves and order; concise, example-driven, no rationale lectures.
+Per the established convention: adapt wording and re-point examples to the student's project; preserve the core steps and their order; concise, example-driven, no rationale lectures.
 
 ### Moment 1 — The purpose and the picks (Phase 2)
 
@@ -91,7 +91,7 @@ A **project-track stage-skill** dispatched by `project-walkthrough`, bundled in 
 
 **Convention** (per dispatch contract §11): items remain numbered while open; resolved items are retained with strikethrough, their original wording preserved, and a resolution date.
 
-1. **The annotation format.** The rationale-as-annotation (one line per article in `reference_articles.md`) is the draft's answer; whether stage 11 wants more structured per-article fields (venue, year, section inventory) to derive from is `derive-paper-structure`'s call at its authoring — the two skills should be read together at that point. The trove manifest's fields (`genre`, `venue_year`, `models_well`) are candidate carriers if stage 11 wants structure.
+1. ~~**The annotation format.** The rationale-as-annotation (one line per article in `reference_articles.md`) is the draft's answer; whether stage 11 wants more structured per-article fields (venue, year, section inventory) to derive from is `derive-paper-structure`'s call at its authoring — the two skills should be read together at that point. The trove manifest's fields (`genre`, `venue_year`, `models_well`) are candidate carriers if stage 11 wants structure.~~ *Resolved 2026-06-07 at `derive-paper-structure`'s authoring: the stage-11 joint read works from the full texts in `articles/`, so the one-line annotations suffice; no structured fields needed.*
 2. **Moment wording.** Moment 1 awaits the educator's voice read, per precedent.
 3. **The trove-gap signal's destination.** Phase 3's fired-fallback note rides the return payload into the walkthrough's session record; whether it should also reach the teacher-admin weekly digest (a T-entry in the obligations register) is a Tier 8 call — flagged in the register alongside T1's curriculum-articles scope.
 4. **Trove freshness at student workspaces.** The manifest ships with the article library at provisioning; how a mid-year educator addition reaches already-provisioned workspaces is a **real authoring task, not a config re-run** (critique 2.4): `fetch-articles`' manifest mode currently consumes only `method-exemplars.yaml` — it does not know `structure-models.yaml`. Either fetch-articles learns the second manifest (the natural fix, at its next revision) or a separate sync path is designed; to be resolved when the provisioning flow is finalized.

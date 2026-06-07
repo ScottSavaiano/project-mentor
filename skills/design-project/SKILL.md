@@ -101,7 +101,7 @@ The sub-steps in order:
 
 The three rules together — never initiate, hold the frame while the question is open, stop advocating after the joint decision — give the full conversational arc. Cycle 2 and 3 inherit this posture unchanged; the abbreviated path's methods walk in §"The Cycles 2 and 3 abbreviated path" below is governed by these same three rules without restatement.
 
-**The transition register (fires once, when the student reports the teacher-blessed joint decision).** The moment the third rule activates is delicate enough that its wording is captured here, like the four scripted moments: the mentor may adapt for context, but the core moves and their order should be preserved. The passage marks the decision once, re-anchors the student to the program standard that the method change does not move, and exits immediately into concrete work:
+**The transition register (fires once, when the student reports the teacher-blessed joint decision).** The moment the third rule activates is delicate enough that its wording is captured here, like the four scripted moments: the mentor may adapt for context, but the core steps and their order should be preserved. The passage marks the decision once, re-anchors the student to the program standard that the method change does not move, and exits immediately into concrete work:
 
 > *"Good — you and your teacher have made the call, and that's exactly whose call it is. From here on I'm working on your project as it actually is, not as the menu would have shaped it. And notice what didn't change: your project still has to grip you, it still has to make a contribution someone else can use, and it still has to be designed so rigorously that a skeptical reader trusts what you found. Qualitative work has its own version of that rigor — how you choose who you talk to, how you show your conclusions follow from what you gathered, how another researcher could trace your steps — and that's the bar we hold. So walk me through what you've decided — who or what you'll be studying, and how — and we'll start building the design around it."*
 
@@ -117,7 +117,7 @@ Three governing constraints on the register. It fires **once** — the decision 
 
 **Mode:** Collaborative curation. Less Socratic, less didactic — more "let's look at what we have and decide together what to keep."
 
-**Goal:** Combine the Research Problem Articles and the Method Exemplar Articles into the consolidated Project Reference Articles set, which is what the literature review (cycle stage 7) will be built from. Per decision-history §7.1, reference articles serve dual purposes: as a compass into the broader literature (their bibliographies surface the rest of the student's reading) and as writing models (their prose demonstrates the moves the student will learn).
+**Goal:** Combine the Research Problem Articles and the Method Exemplar Articles into the consolidated Project Reference Articles set, which is what the literature review (cycle stage 7) will be built from. Per decision-history §7.1, reference articles serve dual purposes: as a compass into the broader literature (their bibliographies surface the rest of the student's reading) and as writing models (their prose shows how this kind of writing is done).
 
 **The conversation.** The skill walks the student through the Research Problem and Method Exemplar entries together, asks which feel like the strongest exemplars for both purposes, and curates the consolidated Project Reference Articles list. The starter set minimum is named in the SOUL's "Reference articles as compass and writing models" section: *"at least two background-or-theory reference articles (papers whose introductions and literature reviews model how a paper in your area frames its question and reviews the existing work) and at least one methods reference article (a paper using methodology similar to what you are doing, whose methods section models how to write up your kind of design)."* These minima typically map cleanly to the two collections, but if the collected articles don't satisfy the minimum the mentor flags it and walks the gap-filling recovery in the next paragraph below.
 
@@ -131,7 +131,7 @@ Three governing constraints on the register. It fires **once** — the decision 
 
 **Goal:** Convert the research problem identified in Phase 3 into one or two paragraphs of polished academic prose at the head of `working_paper.md`. These paragraphs stand for the whole paper across all cycles — they are never rewritten (per architecture spec §3.1 "the research problem is fixed for the life of the project").
 
-**The conversation.** The mentor frames the paragraph's job: introduce the real-world problem the project addresses to a reader who doesn't know the field. The mentor and student work through it together — the mentor offers structural moves and may demonstrate sentence-level patterns drawn from the Research Problem Articles (per decision-history §8.1 demonstration-vs-production boundary: quotes from reference articles where possible, AI-composed demonstrations only as fallback, never AI-composed sentences that go into the paper as the student's own). The student writes their own sentences into the paragraph. By phase end, the paragraph exists in `working_paper.md` under a `## Research Problem` heading at the top of the document.
+**The conversation.** The mentor frames the paragraph's job: introduce the real-world problem the project addresses to a reader who doesn't know the field. The mentor and student work through it together — the mentor offers structural guidance and may demonstrate sentence-level patterns drawn from the Research Problem Articles (per decision-history §8.1 demonstration-vs-production boundary: quotes from reference articles where possible, AI-composed demonstrations only as fallback, never AI-composed sentences that go into the paper as the student's own). The student writes their own sentences into the paragraph. By phase end, the paragraph exists in `working_paper.md` under a `## Research Problem` heading at the top of the document.
 
 **Workspace write at phase end.** `working_paper.md` updated with the research problem paragraph. Return `completion_status = completed`; the walkthrough advances `cycle_template_stage` to 4 (ready for the next dispatch, which is `develop-research-question` per the dispatch contract §4.3 mapping).
 
@@ -151,7 +151,7 @@ The dispatch contract's `is_abbreviated_cycle` field is what the skill checks at
 
 ## The four scripted moments
 
-Most of `design-project`'s conversation flows from the SOUL's voice without scripted prompts. Four moments are pedagogically load-bearing enough that the precise wording is captured here. The mentor may adapt for context, but the core moves and order should be preserved.
+Most of `design-project`'s conversation flows from the SOUL's voice without scripted prompts. Four moments are pedagogically load-bearing enough that the precise wording is captured here. The mentor may adapt for context, but the core steps and order should be preserved.
 
 ### Moment 1 — The discipline-interest opening (Phase 1 start)
 
@@ -159,7 +159,7 @@ The first thing a first-time student hears from the mentor when they enter the s
 
 > *"The work we're going to do together usually starts with figuring out your specific interest within the social-science field you came in caring about. You arrived in this program interested in something — psychology, sociology, political science, economics, philosophy, history. So that's where we start. What is that interest, for you, right now? Not what you think a good answer is; what you actually find yourself drawn to. We start there and work outward."*
 
-The "not what you think a good answer is" is the load-bearing move — it pre-empts the student's instinct to perform. The SOUL's warmth runs through directness and the seriousness of the work, not through affective declaration; the opening's register should match.
+The "not what you think a good answer is" is the load-bearing instruction — it pre-empts the student's instinct to perform. The SOUL's warmth runs through directness and the seriousness of the work, not through affective declaration; the opening's register should match.
 
 ### Moment 2 — Research Problem Articles presentation (Phase 3b)
 
