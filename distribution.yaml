@@ -91,15 +91,9 @@ env_requires:
 #     design-detailed-methodology/SKILL.md
 #     assemble-proposal/SKILL.md
 #     scaffold-section/SKILL.md
-#     writing-time-mentor/SKILL.md
 #     compile-working-paper/SKILL.md
 #     socratic-probe/SKILL.md
 #     literature-synthesis/SKILL.md
-#     fetch-articles/SKILL.md            # supporting skill (added 2026-06-04):
-#                                        # stages reference articles locally,
-#                                        # PDF + extracted text; see the private
-#                                        # curriculum-articles repo for the
-#                                        # staged method-exemplar set
 #
 # (begin-next-cycle and framing-for-competition are Tier 5 — not Cycle 1
 # critical path. Will be added in a later v0.x release before year 2.)
