@@ -1,6 +1,6 @@
 ---
 name: model-escalation
-description: Recognize when a mentor conversation has entered a genuine high-judgment moment, and surface a specific, copy-pasteable recommendation that the student upgrade from the default tier (Haiku 4.5) to the careful tier (Opus 4.7) for that question. Fires at proposal review, methodology framing at load-bearing decision points, gap identification, integrity questions touching the demonstration-versus-production boundary, and substantive critical feedback on a submittable draft. Does not fire on routine clarifying questions, status check-ins, or follow-ups after the student has already upgraded. A meta-skill — the high-stakes mentor skills reference this one rather than re-implementing the policy.
+description: Recognize when a mentor conversation has entered a genuine high-judgment moment, and surface a specific, copy-pasteable recommendation that the student upgrade from the default tier (Haiku 4.5) to the careful tier (Opus 4.7) for that question. Fires at proposal review, methodology framing at load-bearing decision points, gap identification, new-cycle assessment, integrity questions touching the demonstration-versus-production boundary, and substantive critical feedback on a submittable draft. Does not fire on routine clarifying questions, status check-ins, or follow-ups after the student has already upgraded. A meta-skill — the high-stakes mentor skills reference this one rather than re-implementing the policy.
 ---
 
 # Model Escalation
@@ -27,6 +27,7 @@ This skill fires at a small, deliberate list of moments:
 - **Proposal review.** A formal evaluation of a research proposal against the Regenerrific standard. This is the highest-stakes mentor act and the clearest case for the upgrade.
 - **Methodology framing at a load-bearing decision point.** When the student is choosing between methodological approaches at a point the dispatch contract or implementation plan flags as significant — not every methodology question, but the ones where the choice substantially shapes the rest of the project.
 - **Gap identification.** When the student is evaluating whether their research question is genuinely novel, or whether the gap they have identified is real. This requires literature-aware possibility-space reasoning — the kind where the stronger model's edge is most felt.
+- **New-cycle assessment.** When the student is weighing, between cycles, whether their completed cycle's results have opened a genuinely new question worth a next cycle. This is gap-identification reasoning applied to results — the same literature-aware, possibility-space judgment, now held against the report-then-decide firewall (a new cycle is earned by a new question, never by an unwelcome or expected result). It is high-stakes: it decides whether the project continues or closes. *(Added 2026-06-08.)*
 - **Integrity questions touching the demonstration-versus-production boundary.** When the conversation is navigating the boundary between what the student must demonstrate themselves and what the agent may produce on their behalf. The decision-history's reasoning on this (Section 8) is precise; the mentor needs to reason at that level of precision.
 - **Substantive critical feedback on a draft to be submitted.** When the student is asking for the mentor's evaluation of work they intend to submit (to a competition, to a teacher, to an external reviewer), the feedback needs to be at the highest level the mentor can deliver.
 
@@ -86,6 +87,10 @@ Three illustrative examples — these are register samples, not scripts:
 
 > "What you're really asking is whether your gap is genuinely novel — and that is a question about the literature you've read, what it covers, and what space it leaves. That kind of possibility-space reasoning is where the careful tier earns its keep. Switch with `/model careful` and then tell me to proceed. After we're done, `/model default` returns to the day-to-day tier for the rest of the session. Take a moment to do that, and then come back to me."
 
+**New-cycle assessment:**
+
+> "What you're weighing is whether your results opened a genuinely new question — one you couldn't have asked before you had these findings — and that's the same kind of literature-and-possibility reasoning as judging a gap, now applied to what you found. It decides whether the project continues or closes here, so it's worth the careful tier. Switch with `/model careful` and tell me to proceed; `/model default` returns to the day-to-day tier once we've decided. I'll wait."
+
 **Integrity question:**
 
 > "We've moved into a demonstration-versus-production question — what I may produce on your behalf, and what you must demonstrate yourself. The boundary here is real and the reasoning has to be precise. Switch with `/model careful` and then say go; `/model default` returns to the day-to-day tier when we're past this. I'll be here."
@@ -98,7 +103,7 @@ Three things to notice across the examples:
 
 ## Integration with the high-stakes skills
 
-The high-stakes mentor skills — initially `assemble-proposal`, `identify-gap`, `design-detailed-methodology` (at load-bearing decisions), and any skill delivering substantive critical feedback on a submittable draft — reference this skill at their activation point. The pattern: when a high-stakes skill recognizes it is firing on a moment in its own escalation list, it dispatches to `model-escalation` rather than re-implementing the recommendation. That way the policy — *when* to flag, *what* to say, *how to handle decline* — lives in one place.
+The high-stakes mentor skills — initially `assemble-proposal`, `identify-gap`, `design-detailed-methodology` (at load-bearing decisions), `assess-new-cycle` (the new-cycle assessment, added 2026-06-08), `begin-next-cycle` (the later-cycle method-approach framing, on the existing "methodology framing at a load-bearing decision point" moment — added 2026-06-08), and any skill delivering substantive critical feedback on a submittable draft — reference this skill at their activation point. The pattern: when a high-stakes skill recognizes it is firing on a moment in its own escalation list, it dispatches to `model-escalation` rather than re-implementing the recommendation. That way the policy — *when* to flag, *what* to say, *how to handle decline* — lives in one place.
 
 If the educator later decides "we should also flag at moment *X*," or "the recommendation language should change," the edit happens here, once, and propagates to every skill that references this one.
 
