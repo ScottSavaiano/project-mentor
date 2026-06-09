@@ -1,0 +1,153 @@
+---
+name: compile-working-paper
+description: The thin, purely mechanical paper-state utility. Reconciles working_paper.md against the expected-item set (the section-scaffolds.yaml template + the student's paper_structure.md), renders a chat-window status view of what is written and what is still open plus a page-budget reading, and ingests the student's Google-Docs round-trip as pure format conversion — by OAuth pull (the bundled Google Workspace skill's `docs get`) or by manual Markdown export, interchangeably. Runs the paper-chain integrity check: flags a scaffold marker the student left in finished prose, re-anchors and (on request) restores a section heading the round-trip dropped, and re-surfaces any expected item dropped without being written. It never composes or edits the student's prose and never judges the writing (decision-history §8.2) — format conversion and mechanical coverage facts only. Invocable any time; callable by the other skills at startup/handoff and embeddable in the prompts they compose. Status — draft, awaiting teacher-admin critique and educator review.
+---
+
+# Compile Working Paper
+
+**Last edited:** 2026-06-09 (Cowork — first draft, authored against the paper-scaffolding design: the living-scaffold/reconciliation mechanism (spec §5.4, §12); the marker/reconciliation contract and closed format-conversion operation (contract §4.4); the file-authoritative ruling (contract §5.3 / spec-critique F6.3); the no-judgment-on-writing line (decision-history §8.2); the v0.16.0 Google Workspace OAuth path and the both-paths round-trip decision (decision-log 2026-06-09); the chat-window rendering decision; and the three forward-binding constraints this skill was asked to discharge — the two-line marker unit, the kept-marker flag, and the heading-anchor robustness)
+*Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules. This skill also carries a Status section at the bottom recording the draft-vs-promoted lifecycle.*
+
+## What this skill is
+
+`compile-working-paper` is the **thin, purely mechanical paper-state utility** of the paper track. It does three mechanical things and makes no judgments:
+
+1. **Reconciles** `working_paper.md` against the **expected-item set** — the `section-scaffolds.yaml` template plus the student's `paper_structure.md` — to determine, for every section and item, whether it is written, still open, or dropped.
+2. **Renders** a one-screen **status view** (written / open per section, a simple progress indicator, and a page-budget reading) designed to read cleanly in a **chat window** (TUI, desktop app, or dashboard alike).
+3. **Ingests the Google-Docs round-trip** — pulling the student's written prose back into `working_paper.md` as **pure format conversion** — by either of two interchangeable paths (OAuth pull or manual Markdown export), and runs the **paper-chain integrity check** on the result.
+
+**The hard line — it never touches the writing as writing.** It never composes a sentence, never edits or refines the student's prose, and **never makes any judgment about the quality of the writing** (decision-history §8.2). Its only writes to the student's prose are *format conversions* — moving the student's own words between formats without altering them — and *mechanical restores* of template-derived structure (a re-surfaced scaffold marker, a dropped heading). It reports **coverage and budget facts only** ("Methods is empty," "you've written 6 of your 25 pages," "there's a scaffold prompt still sitting in your Results"). This is what keeps the round-trip STS-clean: the report is the student's, written without AI, and this skill only ever moves and counts — it never writes.
+
+It is **invocable at any point** and **callable by the other skills** — at their startup and handoff moments, and embedded inside the handoff prompts they compose for the research and review agents, so a handoff always carries an accurate snapshot. It also feeds the project-wide session brief (`project-briefing`) the paper-coverage piece of its "where things stand."
+
+## When this skill fires
+
+Three invocation modes. All three are mechanical; none is a rationale trigger or a model-escalation moment.
+
+**1. A status request (read-and-render).** The student asks, in their own words — *"what's the status of my paper," "what have I written and what's left," "how much have I done," "what do I have left to write"* — or another skill (or `paper-walkthrough`) calls it for a snapshot. The skill reads `working_paper.md`, reconciles it against the expected-item set, and renders the status view. This mode writes nothing except a re-surfaced marker if reconciliation finds a dropped item (below).
+
+**2. A round-trip ingest (the writing comes back).** The student has written in their Google Doc and wants those words reflected in their working paper. The skill brings the prose back by one of two interchangeable paths (see "The round-trip"), format-converts it into `working_paper.md`, reconciles, and runs the integrity check. This is the write-heavy mode.
+
+**3. A callable snapshot (for another skill).** Another skill calls it at its startup or handoff, or embeds its rendered output inside a prompt the student will paste to the research or review agent — so the snapshot travels with the handoff. Same read-and-render as mode 1; the caller decides what to do with the output.
+
+**The sync triggers (when mode 2 fires).** The round-trip ingest is **event-driven, never on a fixed clock for interactive reconciliation**. It fires: **(1) on request** (the student asks for status — the pull precedes the report so the status reflects their latest writing); **(2) at session open** (`on_session_start` hook — paired with the startup brief); and **(3) at session close** (`on_session_end` hook — a final capture before the session ends, and the natural moment for the per-session archive snapshot). The mechanical close-sync can run as an `on_session_end` shell-hook *script* with no agent turn (platform primer §7). A **fourth, archival-only** capture rides the **review agent's weekly Friday cron** (the journaling run) — it snapshots the current Doc state for the audit trail and surfaces it to the student as a journaling note ("your paper is unchanged since last week" is itself fine to log), but it **never silently reconciles** `working_paper.md` unattended. No other scheduled syncs.
+
+## What it reconciles, and the anchor precedence
+
+The **template is the source of truth** for which items exist; the inline `[[ … ]]` markers in `working_paper.md` are a **display layer**, not the authority (spec §5.4). The expected-item set is the `section-scaffolds.yaml` template for each section plus the student's `paper_structure.md` (which sections exist, in what order, for this cycle). Reconciliation walks the expected set and classifies each item as **written** (prose present, marker gone), **open** (marker present, no prose yet), or **dropped** (neither — the student deleted the marker without writing).
+
+**Anchor precedence (contract §4.4).** To map a piece of the document back to an expected item, the skill anchors in this order:
+
+1. **The `id:` marker** while it is present — `(id: <section.n>)`. The two-line scaffold marker block (function-prompt line + demonstration-quote line) is treated as a **single unit keyed by the line-1 `id:`** — so a Google-Docs round-trip that reflows or splits the block can never orphan the demonstration line from its anchor. *(Discharges scaffold-section open item 1 / critique F5.1.)*
+2. **Heading match** once the student has written a section and removed its markers — the section heading carries the anchor.
+3. **Positional order** against the template if the heading has also drifted — or a best-match re-anchor pass (see the integrity check).
+
+## The round-trip — both paths, pure format conversion
+
+The student writes in Google Docs; their prose has to come back into `working_paper.md`. Two **interchangeable** paths deliver the same bytes to the same reconciliation:
+
+- **Path A — OAuth pull (no export step).** Where the student has authorized Google Workspace (the bundled `google-workspace` skill — agent-guided OAuth2, set up once; platform primer §7), the skill pulls the document's full text directly via `docs get <DOC_ID>` (or, equivalently, `drive download <DOC_ID> --export-mime text/plain`) and feeds it to reconciliation. The student does nothing but ask — there is no manual export to forget. *(The student's Doc ID is recorded so the pull is one step; where it lives is open item 3.)*
+- **Path B — manual Markdown export (the always-available fallback).** The student exports their Google Doc as Markdown and saves it back into the workspace; the skill ingests that file. This path needs no OAuth and is always available; it is the default when Google Workspace is not set up.
+
+**Format conversion is a defined, closed, structural-only operation** (contract §4.4): heading-level mapping, marker re-anchoring by `id:`, fenced-block and list-marker preservation, whitespace/line-wrap normalization. **No token-level change is made to any text outside a marker** — the student's prose is moved between formats, never altered. After conversion the skill writes the reconciled `working_paper.md`; **the file, not any return payload, is authoritative for paper content** (spec-critique F6.3). Whichever path delivered the text, the integrity check and reconciliation that follow are identical.
+
+**No-change detection (path-aware).** On every sync the skill compares the freshly delivered text against the last-synced state. When **nothing has changed**, it says so — and the wording depends on the path, because a no-change on the manual path usually means the student forgot a step:
+
+- *Manual path:* *"I notice your paper hasn't changed since the last sync — did you not make changes this time, or did you forget to **download** the version with your most recent changes from your Google Drive?"* (catches the common forgotten-download failure mode).
+- *OAuth path:* the pull is automatic, so "forgot to download" cannot apply — it simply notes "no changes since last sync" quietly (and the weekly archival capture logs the unchanged state as a fine-to-log journaling note, never an alarm).
+
+## The paper-chain integrity check
+
+The round-trip is the load-bearing path from the student's writing to every downstream state file, so a *silent* break — orphaned prose, a dropped section — is the costly failure to engineer out rather than leave to a student remembering not to delete a heading. On every ingest (and on a status-request reconciliation), the skill checks for and handles three things:
+
+- **A dropped expected item** (no prose and no marker — the student deleted a scaffold prompt without writing it). The skill **re-surfaces** it: it re-lays that item's template marker so nothing is silently lost, leaving all written prose untouched. *(Re-laying a template-derived marker is a mechanical restore, not a composed scaffold — see the writer note in open item 1.)*
+- **A kept marker surviving in otherwise-written prose** (the student wrote the section but left a `[[ … ]]` scaffold prompt — or a demonstration quote — embedded in it). The skill **flags it** — names the section and shows the line — so the student can delete it. It **never deletes the line itself** (that is the student's prose surface). *(Discharges scaffold-section critique F1.2: the lingering-demonstration-quote bound now has the compile-side flag it named as a forward dependency; the STS line still rests on attribution, this is the convenience backstop.)*
+- **A missing or renamed section heading** (the anchor is gone — a deleted heading, or a Google-Docs export that renamed or reflowed it). The skill **re-anchors** by the precedence ladder (id → heading-match → positional/best-match). Where a section still cannot be confidently re-anchored, it **warns and offers to restore the heading from the template** — restoring a heading is a template-derived structural restore that **never touches prose**. The student keeps a deliberately renamed heading if they want; the skill surfaces the drift rather than fighting it. *(Discharges the paper-chain heading-anchor fragility raised 2026-06-09.)*
+
+These are mechanical detections reported as facts; none is a judgment about the writing.
+
+## Versioning and the archive
+
+There is **one canonical `working_paper.md`** that every skill reads and writes at a known path — never a "find the latest version" scheme (which would put version-resolution logic, and its bugs, into every skill). Versioning is a **snapshot layer** on top of that single file, in two tiers sharing one source of truth:
+
+- **The quiet archive (the real audit trail).** On every sync, the skill writes a **timestamped `.md` snapshot into `versions/`** and lets the git-backed workspace commit it. Fine-grained (per-sync), cheap, always present (OAuth or not), and the thing to **roll back from** if a reconciliation misfires. Git underneath supplies diffs, timestamps, and integrity — so this layer is mostly "surface git history as dated files" rather than a parallel version system.
+- **The student-facing archive (a surfaced clone) — *not this skill's write* (F-3, 2026-06-09).** A **coarser** mirror the student can browse — **one snapshot per session**, not per-sync — surfaced preferably as a dated Google Doc in a Drive "Paper Archive" folder (clickable/readable), or the workspace `versions/` folder when there is no OAuth. The student-facing copy is a *subset clone* of the quiet archive. But **the Drive-side write (folder lifecycle + `docs create`) does not belong to `compile-working-paper`** — it is outbound `docs create` work, the same category this skill otherwise routes to the outbound-delivery concern (open item 7 / `scaffold-section`'s side). To keep this skill the thin *inbound* reconciler, it **produces** the per-sync `versions/` snapshots and exposes "the current snapshot to surface"; the **outbound delivery concern consumes that and writes the student-facing Drive archive** (designed with open item 7). Compile owns the quiet archive; it does not grow a Drive-management lobe.
+
+This versioning is also why the round-trip stays low-risk: the skill **regenerates** `working_paper.md` from the pulled Doc + template rather than surgically editing prose, and every sync is snapshotted first — so a bad reconcile is a one-step rollback, not a corrupted paper. The student-facing version history doubles as **authentic-authorship evidence** (the paper visibly grew in the student's own writing over weeks) — useful for the STS "written by the student" standard.
+
+## The status view (rendered for a chat window)
+
+The render is plain Markdown that reads well in a chat window — no terminal-only affordance. It carries, mechanically:
+
+- **Per-section status** — each section marked written / partly written / open (e.g., a simple checklist, or written / partial / open glyphs), in `paper_structure.md` order.
+- **A progress indicator** — a simple text bar or an "X of N items written" count across the expected set.
+- **A page-budget reading** — "≈ N of 25 pages" (the program's 25-page working budget, register X3; the competition's 20-page compression is an end-of-project editing task, not a limit enforced here). **Mechanical only** — it reports the count and never polices length.
+- **Any integrity flags** from the check above — a kept marker, a restored/ drifted heading, a re-surfaced item.
+
+It states facts ("Methods is empty"; "Results: 3 of 5 parts written"; "≈ 6 of 25 pages") and **never** comments on whether the writing is good.
+
+## The scripted moments
+
+Per the established convention: adapt wording to the student's project; preserve the steps and their order; concise, plain, no rationale lectures. The student-facing vocabulary is the natural way a student asks — *status / written / left / done* — never "where things stand."
+
+### Moment 1 — Showing the status
+
+> *"Here's where your paper is right now:*
+> *[rendered status view — per-section written/open, the progress count, ≈ N of 25 pages].*
+> *Want to pull in your latest writing first, or keep going from here?"*
+
+### Moment 2 — An integrity flag (kept marker / drifted heading)
+
+> *"Two quick things from your latest draft: there's still a scaffold prompt sitting in your [section] — [the line] — you can delete it whenever. And your [section] heading looks different from the template, so I re-matched it; say the word if you'd like me to put the standard heading back. Neither changes anything you wrote."*
+
+### Moment 3 — No change detected at sync (manual path)
+
+> *"I notice your paper hasn't changed since the last time I synced it — did you not make changes this time, or did you forget to download the version with your most recent changes from your Google Drive?"*
+
+*(OAuth path: no Moment — an unchanged pull is noted quietly, and the weekly archival capture logs the unchanged state as a fine-to-log journaling note, never an alarm.)*
+
+## What this skill writes to the workspace
+
+`working_paper.md` plus the version archives, all mechanically. To `working_paper.md`: the **reconciled student prose** (format conversion from the round-trip — never composed, never edited), plus **template-derived restores** — a re-surfaced dropped marker, or a heading the student asked to restore. To the **quiet archive**: a per-sync timestamped `.md` snapshot into `versions/` (git-committed) — its own write, intrinsic to the regenerate-not-edit rollback safety. The **student-facing Drive archive is *not* written here** (F-3) — compile exposes the snapshot; the outbound-delivery concern (open item 7) writes the Drive copy. It **never** writes the student's content, **never** edits existing prose, and **never** judges the writing — the `versions/` snapshots are copies of the student's own reconciled file, not new writing. It does **not** write `project_paper_status.md` (the walkthroughs own it — this skill *reports* state, it does not set position) or `decisions.md` (not a rationale trigger).
+
+Return payload per contract §5.1: `completion_status`; `workspace_writes` (the reconciled `working_paper.md`, where mode 2 ran); `advisory_notes` carrying the mechanical facts — coverage per section, the page count, and any integrity flags (kept markers, restored/drifted headings, re-surfaced items); `newly_stale_sections` empty (compiling stales nothing); `decisions_appended` empty; and `seal_state_change` / `new_cycle_decision` / `writing_handoff` all `null` (this skill makes no decision and triggers no handoff). The rendered status view is the human-facing output; `advisory_notes` is the machine-facing version a caller embeds in a handoff prompt or the `project-briefing` skill consumes.
+
+## Edge cases
+
+**OAuth not set up.** Path A is unavailable; the skill uses Path B (manual Markdown export) with no loss of function — the reconciliation is identical. It does not nag about OAuth; it just uses the path that is available.
+
+**The student renamed a heading on purpose.** The skill re-anchors and surfaces the drift, but does not overwrite a deliberately renamed heading — it offers the template heading, and takes no for an answer.
+
+**A section not yet started.** Reported as open (its full scaffold of markers still standing, or to be laid by `scaffold-section`); not an error.
+
+**Over the 25-page working budget.** Reported as a plain count ("≈ 27 of 25 pages") with no policing — the budget is a working target, not a gate here; the competition's 20-page compression is a separate end-of-project editing task (register X3).
+
+**A sealed-cycle section.** The skill **reports** sealed sections' state like any other but does not re-surface markers into a sealed cycle or alter its frozen prose — it does not enforce the seal itself (that is `paper-walkthrough`'s and the seal logic's, §6); it simply reflects what is there.
+
+**The student asks it to fix or improve the writing.** Outside its job and against the program-wide negative-case rule (decision-history §8.2 / X4): it declines plainly — it compiles and counts, it does not write or edit — and points them to a human. (It is the *mechanical* sibling of `scaffold-section`'s same decline.)
+
+**An empty paper / first run.** Renders the full open scaffold as the roadmap; "0 of N written, ≈ 0 of 25 pages." Nothing to reconcile yet.
+
+## Where this skill lives in the architecture
+
+A **paper skill** (dispatched by `paper-walkthrough`, and callable by any skill), bundled in the project-mentor distribution (curator-immune to `skill_manage`; with the curator disabled on student profiles per the 2026-06-09 decision, also safe from curator pruning; update-refreshed per platform primer §4/§7). It reads `section-scaffolds.yaml` (curriculum-articles), the student's `paper_structure.md`, and `working_paper.md`; it ingests the Google-Docs round-trip (OAuth `docs get` or manual export); it writes only the reconciled `working_paper.md` (prose format-conversion + template restores). It is the mechanical counterpart to `scaffold-section` (which composes scaffolds and lays markers) and the paper-coverage feeder for `project-briefing` (the whole-project, cross-agent "recent actions + next steps" brief). It is **not** a rationale trigger and **not** a model-escalation moment — it is purely mechanical, the same deliberate negative as `derive-paper-structure` and `scaffold-section`'s routine path.
+
+## Status
+
+**Draft, authored 2026-06-09 (Cowork)** against the architecture specification (§§5.4, 5.1, 6, 12), the dispatch contract (§§4.4, 4.6, 5.1, 5.3), decision-history §8.2 (the negative-case / no-judgment-on-writing rule), the platform primer §7 (the bundled Google Workspace OAuth skill — Docs read/create/append, no in-place overwrite) and §4 (distribution/curator), `section-scaffolds.yaml` (the template / expected-item set), and the 2026-06-09 decisions (both round-trip paths OAuth-ready; chat-window rendering; the three forward-binding constraints discharged here).
+
+**Teacher-admin critique passed 2026-06-09** (one blocking — A-1, the surviving "Docs read-only" instance, which was in `00-handoff.md`, *not* this draft; the draft was verified clean of the error — now fixed in the handoff; two substantive; minors). Dispositions applied: **F-2** resolved (i) — `compile-working-paper` owns the dropped-marker re-surface write; the collision with `scaffold-section` + the §4.4/§4.6 reconcile are documented in open item 1 and bound for the contract pass. **F-3** — the student-facing Drive archive is moved *out* of this skill (it stays the thin inbound reconciler + the quiet `versions/` snapshot; the Drive write joins the outbound-delivery concern, open item 7). **M-1** (`drive download --export-mime` named as the second pull route), **M-3** (the on-next-start fallback for a missed `on_session_end`) applied. Educator voice-read: the three Moments approved (the budget line confirmed as a plain count for now). Bound for the contract/spec pass: M-2 (drop spec §12's stale "milestone consultation" clause), S-1 (amend §4.6's grant), the §4.4 re-surface attribution, and the informational §5.4 OAuth-path line. **Committed.**
+
+### Open authoring items
+
+**Convention** (per dispatch contract §11): items remain numbered while open; resolved items are retained with strikethrough, their original wording preserved, and a resolution date.
+
+1. **Re-surface ownership (F-2, resolved) + the §4.6 writer-grant gap (S-1) — both bound for the contract pass.** **Resolution (educator, 2026-06-09): `compile-working-paper` owns the dropped-marker re-surface write** (resolution (i)) — it is already mid-reconciliation with the file open and the template loaded, and re-laying a template marker is a *mechanical restore* (consistent with how it restores headings), not a composition; dispatching back to `scaffold-section` for a one-line re-lay would force a reconciliation to stop and call another skill mid-stream. **This currently collides with the committed `scaffold-section` draft (its "Re-surface mode," line ~58), which claims the same dropped-marker re-lay.** The contract pass must therefore: (1) retire `scaffold-section`'s dropped-marker re-surface (it keeps *stale re-scaffold* — re-composing a section's scaffold after an upstream revision — which is composition, not a mechanical single-item re-lay); (2) correct contract §4.4's "`scaffold-section` … can re-surface" attribution; and (3) **amend contract §4.6 (S-1)** — its grant lists compile as writing only "reconciled student prose … pure format conversion," but compile's actual write set is broader: *reconciled prose + template-derived restores (re-surfaced markers, restored headings)*. The STS axis is clean either way (template-derived restores never compose prose); this is purely a single-writer reconcile. Until the contract pass runs, the two committed skills carry a documented, transient contradiction — this open item is the record of the chosen end state.
+2. **The page-count method.** "≈ N of 25 pages" needs a defined mechanical estimate (word-count-to-page ratio at the program's 1.5-line-spacing format, or a render-based count). Pin a concrete, deterministic rule so the count is stable across runs.
+3. **Where the student's Doc ID lives (Path A).** The OAuth pull needs the Google Doc's ID on file so it is one step. Candidate homes: a field in `project_paper_status.md`, or a small per-student config. Pin with the round-trip mechanics and `paper-walkthrough`.
+4. **The chat-window visual's exact form.** Confirm the render (checklist vs. progress bar vs. small table) against how the **desktop app** chat window renders Markdown (tables? glyphs?) — tied to the open desktop-as-primary decision. Keep it degradation-safe for the TUI regardless.
+5. **The `project-briefing` consumption contract.** Define exactly what `advisory_notes` shape `project-briefing` consumes for its paper-coverage section. Pin when `project-briefing` is authored (next).
+6. **Moment wording.** Both Moments await the educator's voice read, per precedent.
+7. **Outbound automation now possible (design decision pending).** The Google Workspace skill supports `docs create --body` (a new Doc seeded with content) and `docs append` (to the end of an existing Doc) — corrected 2026-06-09 from an initial "read-only" read. This means the *outbound* direction (delivering the scaffold into the student's Doc) can be **automated**, not just hand-pasted: e.g., `docs create` a working-paper Doc seeded with the foundational scaffold, then `docs append` each newly-unlocked section's scaffold as it opens; the student writes in the Doc; this skill pulls it back (`docs get` / `drive download`). The STS boundary holds because **only scaffold structure (function-prompts + attributed demonstration quotes) is ever written outbound — never AI-composed prose.** Outbound delivery is naturally `scaffold-section`'s side (it owns the scaffold); this skill stays the inbound reconciler. To design into the paper-chain flow (and decide: create-once-then-append vs. new-versioned-Doc-each-time) with the educator, alongside `project-briefing` / `paper-walkthrough`. Append is end-only, so mid-document re-surfacing still routes through `working_paper.md`.
+8. **The quiet `versions/` mechanics (this skill's) + the Drive archive moved out (F-3).** This skill owns the **quiet per-sync `versions/` snapshot**; pin its mechanics at implementation: timestamped naming, snapshot dedup (skip a snapshot identical to the prior — also the no-change signal), and retention (kept for the project year, or pruned). The **student-facing Drive archive's mechanics** (folder creation/lookup, dated-Doc naming via `docs create`, the per-session cadence) **belong to the outbound-delivery concern (open item 7)**, not here — designed alongside the outbound scaffold delivery so there is one Drive-writing lobe, not two. The cadence split (per-sync quiet / per-session student-facing) is fixed.
+9. **Session-hook and weekly-cron wiring (cross-agent / provisioning).** The session-open/close syncs ride `on_session_start` / `on_session_end` (platform primer §7) — pin whether the close-sync is a pure shell-hook script (no agent turn) or an agent first-turn behavior, and re-verify `on_session_end` fires reliably on the shipped version (issue #38252 watch). **Fallback to design in (M-3):** the close-sync and the per-session student-facing archive both depend on `on_session_end`; if it does not fire (a killed window), the per-session snapshot must be captured on the **next `on_session_start`** instead (compare against the last-captured snapshot), so the per-session archive — and the authentic-authorship evidence trail — survives a missed close rather than silently gapping. The **weekly archival snapshot is a review-agent obligation** (V6 — the Friday journaling cron surfaces the paper-unchanged/updated state as a log note), consumed at the review-agent build.
