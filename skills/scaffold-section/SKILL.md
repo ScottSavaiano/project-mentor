@@ -78,7 +78,7 @@ Per the established convention: adapt wording and re-point examples to the stude
 > *"Here's the structure for your [section] — each line says what that sentence should do, with a quote showing how [their article(s)] did it. Here's how to use it:*
 > *1. Write your own sentence for each line, directly in your Google Doc.*
 > *2. Delete each prompt as you write it.*
-> *3. The quotes are just demonstrations — not your sentences, and they don't go in your paper, so delete those too.*
+> *3. The quotes are just demonstrations — not your sentences, and they don't go in your paper, so delete those too — but don't delete the section headings.*
 > *4. Whenever you're done writing and want to save your changes back to your working paper, follow the steps in your writing-and-saving guide: [link]."*
 
 ### Moment 2 — The no-blueprint engage (the no-blueprint case)
