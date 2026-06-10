@@ -273,7 +273,7 @@ terminal:
 # student machines over time (assess-new-cycle, begin-next-cycle,
 # framing-for-competition, and any once-per-cycle / once-per-year skill).
 #
-# Decision (educator, 2026-06-09): disable the curator on the three
+# Decision (educator, 2026-06-10): disable the curator on the three
 # student-facing profiles rather than `hermes curator pin` each low-usage
 # skill. Rationale: skills load on demand and are NOT all sent with each
 # API call, so unused skills cause no per-call cost bloat — there is no
@@ -282,7 +282,7 @@ terminal:
 # rather than a pin per skill (and per future skill). Disabling does NOT
 # affect `hermes update`'s refresh of bundled skills (separate mechanism).
 # The teacher-admin profile keeps the curator at the educator's discretion.
-# See platform primer Sections 7 and 9 (decision logged 2026-06-09).
+# See platform primer Sections 7 and 9 (decision logged 2026-06-10).
 # Provisioning note: apply this same `curator.enabled: false` to the
 # research-agent and review-agent config.yaml when those profiles are built.
 
