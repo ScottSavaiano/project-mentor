@@ -36,11 +36,14 @@ description: |
 author: "Dr. Savaiano (Bronx High School of Science Social Science Research Program)"
 license: "MIT"
 
-# Minimum Hermes version. v0.12.0 is the floor — earlier versions have
-# weaker skill-protection guarantees (the curator's defense-in-depth
-# gates and the bundled-skill immunity behavior shipped in 0.12.0).
-# See hermes-platform-primer.md, Section 7.
-hermes_requires: ">=0.12.0"
+# Minimum Hermes version. v0.16.0 is the floor — the curriculum relies on
+# v0.16.0 "The Surface Release" features: the Hermes Desktop app as the
+# primary student surface, the session lifecycle event hooks the paper
+# round-trip syncs on (on_session_start / on_session_end), and the bundled
+# Google Workspace OAuth skill behind the Docs round-trip. (Raised from
+# >=0.12.0, 2026-06-13; earlier >=0.12.0 floor was the curator/bundled-skill
+# protection baseline.) See hermes-platform-primer.md, Sections 5 and 7.
+hermes_requires: ">=0.16.0"
 
 # -------------------------------------------------------------------
 # Environment variables required for install
