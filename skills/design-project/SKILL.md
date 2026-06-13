@@ -1,6 +1,6 @@
 ---
 name: design-project
-description: Conducts the foundational conversation that establishes what a student's research project is — discipline interest, topic, research problem (with the Research Problem Articles), method-approach from the Regenerrific menu (with the Method Exemplar Articles), Project Reference Articles consolidation, and the once-only research problem paragraph for Cycle 1. Owns the in-flight co-determination of once-only sequence stage 3 and cycle-template stage 1 internally (per dispatch contract §3.1's named exception to "skills do not maintain private position state"). Fires on dispatch from project-walkthrough at once-only sequence entry, mid-sequence resumption, or at later-cycle method-approach reentry. Status — draft, awaiting educator review.
+description: Conducts the foundational conversation that establishes what a student's research project is — discipline interest, topic, research problem (with the Research Problem Articles), method-approach from the Regenerrific menu (with the Method Exemplar Articles), Project Reference Articles consolidation, and the once-only research problem paragraph for Cycle 1. Owns the in-flight co-determination of project initiation sequence stage 3 and cycle-template stage 1 internally (per dispatch contract §3.1's named exception to "skills do not maintain private position state"). Fires on dispatch from project-walkthrough at project initiation sequence entry, mid-sequence resumption, or at later-cycle method-approach reentry. Status — draft, awaiting educator review.
 ---
 
 # Design Project
@@ -10,7 +10,7 @@ description: Conducts the foundational conversation that establishes what a stud
 
 ## What this skill is
 
-`design-project` is the foundational stage-skill of the project-mentor's Cycle-1 work. It owns the conversation that takes a student from "I'm interested in something in social science" through the once-only sequence (architecture spec §3.1 and §4.1) into the opening stages of the cycle template (architecture spec §4.2 stages 1–3). By the time this skill completes its first full run, the student has:
+`design-project` is the foundational stage-skill of the project-mentor's Cycle-1 work. It owns the conversation that takes a student from "I'm interested in something in social science" through the project initiation sequence (architecture spec §3.1 and §4.1) into the opening stages of the cycle template (architecture spec §4.2 stages 1–3). By the time this skill completes its first full run, the student has:
 
 - A discipline and a specific interest within it, recorded in `project_design.md`.
 - A topic, recorded in `project_design.md`.
@@ -26,9 +26,9 @@ In **Cycles 2 and 3** (after the student has elected an emergent new cycle via `
 
 `project-walkthrough` dispatches `design-project` when its position model resolves to one of these states (dispatch contract §3.1):
 
-- **First-time once-only sequence entry.** `program_phase = year1-first-time`, `spine_complete = false`, `cycle_template_stage = null`. The skill enters at Phase 1 (discipline interest).
-- **Once-only sequence in progress.** `spine_complete = false`, mid-sequence. The skill resumes at whichever once-only sequence stage the dispatch payload's `spine_position` names.
-- **Once-only sequence just completed → Cycle 1 stage 1.** `spine_complete = true`, `current_cycle = 1`, `cycle_template_stage = 1`. The skill enters at Phase 3's method-approach portion. Note: in the conversational reality, this dispatch is the *continuation* of the co-determination conversation that began in Phase 3's research-problem portion — see §"The co-determination exception" below.
+- **First-time project initiation sequence entry.** `program_phase = year1-first-time`, `spine_complete = false`, `cycle_template_stage = null`. The skill enters at Phase 1 (discipline interest).
+- **Project initiation sequence in progress.** `spine_complete = false`, mid-sequence. The skill resumes at whichever project initiation sequence stage the dispatch payload's `spine_position` names.
+- **Project initiation sequence just completed → Cycle 1 stage 1.** `spine_complete = true`, `current_cycle = 1`, `cycle_template_stage = 1`. The skill enters at Phase 3's method-approach portion. Note: in the conversational reality, this dispatch is the *continuation* of the co-determination conversation that began in Phase 3's research-problem portion — see §"The co-determination exception" below.
 - **Mid-Cycle-1 stage 1 or 2.** `spine_complete = true`, `current_cycle = 1`, `cycle_template_stage ∈ {1, 2}`. Resumption mid-stage; the skill picks up where the prior dispatch's partial return left off.
 - **Cycle 2 or 3 once-only-skip entry.** `current_cycle ∈ {2, 3}`, `cycle_template_stage = 1`, `is_abbreviated_cycle = true`. The skill runs the abbreviated path (see "The Cycles 2 and 3 abbreviated path" subsection after Phase 5 for the full handling).
 - **Junior-year restart.** `program_phase = year2-restart`. The skill runs in full Cycle-1-first-time mode against a fresh `current_project_id`, with the prior project's `decisions.md` available as context the mentor draws on conversationally rather than inheriting verbatim (per dispatch contract §9.3 default).
@@ -39,7 +39,7 @@ The skill does **not** fire when the walkthrough's position is in execution regi
 
 `design-project` internally tracks position via the `spine_position` field the dispatch payload carries (dispatch contract §4.3 stage-skill specific fields). Five phases, with mode shifts and workspace writes called out:
 
-### Phase 1 — Discipline interest (once-only sequence stage 1)
+### Phase 1 — Discipline interest (project initiation sequence stage 1)
 
 **Mode:** Socratic. The mentor asks; the student articulates.
 
@@ -53,7 +53,7 @@ The skill does **not** fire when the walkthrough's position is in execution regi
 
 **Workspace write at phase end.** Append to `project_design.md` (under a `## Discipline` heading) the student's discipline plus their specific interest, in one or two sentences in the student's own framing. Return to the walkthrough with `completion_status = partial`, `workspace_writes = [project_design.md§Discipline]`, and the updated `spine_position` for the next dispatch.
 
-### Phase 2 — Topic (once-only sequence stage 2)
+### Phase 2 — Topic (project initiation sequence stage 2)
 
 **Mode:** Socratic.
 
@@ -65,7 +65,7 @@ The skill does **not** fire when the walkthrough's position is in execution regi
 
 **Workspace write at phase end.** Append to `project_design.md` (under a `## Topic` heading) the topic plus the real-world phenomenon the student is most curious about within it. Return `completion_status = partial`, advance `spine_position` to indicate Phase 3 entry.
 
-### Phase 3 — Research problem ↔ method-approach co-determination (once-only sequence stage 3 ↔ cycle stage 1)
+### Phase 3 — Research problem ↔ method-approach co-determination (project initiation sequence stage 3 ↔ cycle stage 1)
 
 **This is the co-determination exception named in dispatch contract §3.1.** The state model treats once-only-sequence stage 3 and cycle-template-stage-1 as discrete positions, but the conversation that decides them is one phase, not two. The research problem becomes fully real only when there's a method-approach that can actually address it; the method-approach choice in turn sharpens the research problem. `design-project` owns this in-flight conversation internally; the state file records the outcome (both decisions complete) when the conversation lands.
 
@@ -137,7 +137,7 @@ Three governing constraints on the register. It fires **once** — the decision 
 
 ### The Cycles 2 and 3 abbreviated path
 
-When this skill is dispatched against `current_cycle ∈ {2, 3}` with `is_abbreviated_cycle = true` (the dispatch payload signals this per dispatch contract §4.1), the phase set narrows considerably. Architecture spec §3.1 and §4.4 are explicit that the research problem is fixed for the life of the project across all cycles, so the once-only sequence work and the once-only research problem paragraph do not repeat. The skill's work in Cycles 2 and 3 is exactly:
+When this skill is dispatched against `current_cycle ∈ {2, 3}` with `is_abbreviated_cycle = true` (the dispatch payload signals this per dispatch contract §4.1), the phase set narrows considerably. Architecture spec §3.1 and §4.4 are explicit that the research problem is fixed for the life of the project across all cycles, so the project initiation sequence work and the once-only research problem paragraph do not repeat. The skill's work in Cycles 2 and 3 is exactly:
 
 - **Phase 1 (discipline interest):** **skipped.** The discipline interest is recorded in `project_design.md` from Cycle 1 and stands.
 - **Phase 2 (topic):** **skipped.** The topic is recorded from Cycle 1 and stands.
@@ -155,7 +155,7 @@ Most of `design-project`'s conversation flows from the SOUL's voice without scri
 
 ### Moment 1 — The discipline-interest opening (Phase 1 start)
 
-The first thing a first-time student hears from the mentor when they enter the once-only sequence. This sets tone for the whole multi-year relationship. The SOUL's voice is the test: any opening line should sound like a thing the SOUL would write unprompted, not like a skill-author imagining what a warm mentor would say.
+The first thing a first-time student hears from the mentor when they enter the project initiation sequence. This sets tone for the whole multi-year relationship. The SOUL's voice is the test: any opening line should sound like a thing the SOUL would write unprompted, not like a skill-author imagining what a warm mentor would say.
 
 > *"The work we're going to do together usually starts with figuring out your specific interest within the social-science field you came in caring about. You arrived in this program interested in something — psychology, sociology, political science, economics, philosophy, history. So that's where we start. What is that interest, for you, right now? Not what you think a good answer is; what you actually find yourself drawn to. We start there and work outward."*
 
@@ -197,7 +197,7 @@ A thin transition beat once the research problem is settled: the writing scaffol
 
 Summary, by file:
 
-- **`project_design.md`** — written at the end of Phases 1, 2, and 3. Sections: `## Discipline`, `## Topic`, `## Research Problem`, `## Method-Approach (Cycle 1)`. For later cycles, only `## Method-Approach (Cycle N)` is appended; the once-only sequence sections stand from Cycle 1.
+- **`project_design.md`** — written at the end of Phases 1, 2, and 3. Sections: `## Discipline`, `## Topic`, `## Research Problem`, `## Method-Approach (Cycle 1)`. For later cycles, only `## Method-Approach (Cycle N)` is appended; the project initiation sequence sections stand from Cycle 1.
 - **`reference_articles.md`** — written during Phase 3 (Research Problem and Method Exemplar entries) and consolidated at the end of Phase 4 (Project Reference Articles section). Per decision-history §7.1, these are accumulating sections; see §"The Cycles 2 and 3 abbreviated path" below for the per-cycle accumulation pattern.
 - **`decisions.md`** — appended at the end of Phase 3 with the five-question rationale entry for the method-approach choice. Format per decision-history §9.1: what is being decided, why, what alternatives were rejected and why, what uncertainty remains, and the teacher-consultation completion sentence.
 - **`working_paper.md`** — **not written by this skill.** Under the 2026-06-08 paper-scaffolding model (contract §4.5/§4.6; spec §5.4) the research-problem section's *writing* is the paper track's. At the end of Phase 5 (Cycle 1 only) the skill returns the **`writing_handoff`** outcome naming the research-problem section; `paper-walkthrough` dispatches `scaffold-section` to lay the `intro.research_problem` scaffold and the student writes the one or two paragraphs under a `## Research Problem` heading at the top of the document.
@@ -210,7 +210,7 @@ Summary, by file:
 
 `completion_status` values, mapped to this skill's specific situations (extends the general definitions in dispatch contract §5.1):
 
-- **`completed`** — the skill has reached the end of one of its phases cleanly and the dispatched portion is done. Specifically: returning `completed` at the end of Phase 3 signals the co-determination is fully landed (both once-only sequence stage 3 and cycle stage 1 are recorded in the state file in one atomic walkthrough integration); returning `completed` at the end of Phase 4 signals the Project Reference Articles consolidation is done and cycle stage 2 is complete; returning `completed` at the end of Phase 5 carries the **`writing_handoff`** for the research-problem section (Cycle 1) — the handoff the walkthrough routes to `scaffold-section` so the student can write it — and signals cycle stage 3 ready to advance, or signals that Phase 5 is skipped (Cycles 2 and 3).
+- **`completed`** — the skill has reached the end of one of its phases cleanly and the dispatched portion is done. Specifically: returning `completed` at the end of Phase 3 signals the co-determination is fully landed (both project initiation sequence stage 3 and cycle stage 1 are recorded in the state file in one atomic walkthrough integration); returning `completed` at the end of Phase 4 signals the Project Reference Articles consolidation is done and cycle stage 2 is complete; returning `completed` at the end of Phase 5 carries the **`writing_handoff`** for the research-problem section (Cycle 1) — the handoff the walkthrough routes to `scaffold-section` so the student can write it — and signals cycle stage 3 ready to advance, or signals that Phase 5 is skipped (Cycles 2 and 3).
 - **`partial`** — the student paused mid-phase (closed the laptop, took a break, hit a natural stopping point that isn't a phase boundary). **Operational rule:** internal `spine_position` (Phase 1, 2, or 3a–3h sub-position) is recorded in the return payload's `workspace_writes` to the relevant files; on resumption, the next dispatch carries the same `spine_position` so the skill picks up where the conversation left off. **The skill is idempotent on re-dispatch when no prior workspace writes exist** — re-running Phase 1 against an empty `project_design.md` just re-asks the discipline-interest question, harmless; this matters for the cross-conversation case where the pre-dispatch state-file write may have succeeded but the dispatch itself may never have begun (dispatch contract §11.8's remaining-open tail). *Contract-section attribution: within-conversation resumption is governed by §2.1's `last_skill_dispatched` cleared-on-return semantics; cross-conversation resumption is governed by §11.8.*
 - **`blocked-on-consultation`** — defense-in-depth signal that the conversation has entered consultation territory the walkthrough's pre-dispatch gate-check could not anticipate. The classic case in this skill: a student introduces an IRB consideration mid-method-approach discussion that the original teacher consultation did not cover. The walkthrough surfaces the consultation requirement per dispatch contract §4 and §5.1 handling.
 - **`blocked-on-precondition`** — should not occur in practice. This skill's preconditions are simple (the dispatch payload provides everything needed) and the walkthrough's pre-dispatch checks cover them. If it does fire, treat as a contract bug per dispatch contract §5.1 handling.
@@ -224,13 +224,13 @@ Summary, by file:
 
 ## Edge cases
 
-**The co-determination exception.** Per dispatch contract §3.1, this skill owns the in-flight co-determination of once-only sequence stage 3 and cycle stage 1 internally — the only place in the contract where a stage-skill is permitted to maintain private position state. The exception is scoped tightly: it covers Phase 3's research-problem-to-method-approach conversation specifically, and nothing else. Phases 1, 2, 4, and 5 advance by the standard mechanism (each phase's completion is a return-payload event that updates the state file before the next dispatch). The co-determination exception does not generalize.
+**The co-determination exception.** Per dispatch contract §3.1, this skill owns the in-flight co-determination of project initiation sequence stage 3 and cycle stage 1 internally — the only place in the contract where a stage-skill is permitted to maintain private position state. The exception is scoped tightly: it covers Phase 3's research-problem-to-method-approach conversation specifically, and nothing else. Phases 1, 2, 4, and 5 advance by the standard mechanism (each phase's completion is a return-payload event that updates the state file before the next dispatch). The co-determination exception does not generalize.
 
 **Mid-conversation interruption.** If the student's conversation ends before Phase 3 completes, the partial return integrates whatever has been written (e.g., the research problem may be named in `project_design.md` even if the method-approach has not been chosen). The state file reflects the partial state: `spine_complete = false` if research problem is not yet recorded, `spine_complete = true` and `cycle_template_stage = 1` only once the full co-determination has landed. On resumption, the next dispatch's `spine_position` field tells the skill where to pick up.
 
 **Student arrives with a method-approach already in mind.** The mentor takes this seriously without rubber-stamping. The conversation walks the menu anyway (per Moment 3) — partly because the student may discover something better, partly because the rationale recording requires the student to have considered alternatives (per decision-history §9.1 "what alternatives were rejected and why"). The student may land on their original choice; that's fine. The walk is what makes the choice deliberate.
 
-**Student arrives with a research problem already in mind.** Students who have done significant pre-program thinking may arrive in the once-only sequence with a research problem fully formed in their heads — "I want to study whether ICE raids in immigrant neighborhoods affect school attendance," for example. The mentor takes the formed problem seriously. Phases 1 and 2 still run in Socratic mode — the SOUL's three-mode taxonomy is preserved — but the Socratic work *aims at confirming the formed problem's structure* rather than at generating one from scratch. The mentor's questions in Phase 1 confirm the discipline the student is operating in; the questions in Phase 2 confirm the topic the formed problem sits within; both phases record their outcomes in `project_design.md` more quickly than the generative case would. Phase 3a then arrives with the research problem largely in place. The five-question rationale at Phase 3h still has to record alternatives considered for the *method-approach* (not the research problem itself, which is settled by the time the rationale fires). If the formed problem starts to dissolve under Socratic examination — the student realizes mid-Phase-1 or mid-Phase-2 that what they arrived with isn't actually what they want to study — the Socratic questions shift aim back to generative, and the Phases run normally from wherever the dissolution lands. The mode stays Socratic throughout; what changes is what the questions are aimed at.
+**Student arrives with a research problem already in mind.** Students who have done significant pre-program thinking may arrive in the project initiation sequence with a research problem fully formed in their heads — "I want to study whether ICE raids in immigrant neighborhoods affect school attendance," for example. The mentor takes the formed problem seriously. Phases 1 and 2 still run in Socratic mode — the SOUL's three-mode taxonomy is preserved — but the Socratic work *aims at confirming the formed problem's structure* rather than at generating one from scratch. The mentor's questions in Phase 1 confirm the discipline the student is operating in; the questions in Phase 2 confirm the topic the formed problem sits within; both phases record their outcomes in `project_design.md` more quickly than the generative case would. Phase 3a then arrives with the research problem largely in place. The five-question rationale at Phase 3h still has to record alternatives considered for the *method-approach* (not the research problem itself, which is settled by the time the rationale fires). If the formed problem starts to dissolve under Socratic examination — the student realizes mid-Phase-1 or mid-Phase-2 that what they arrived with isn't actually what they want to study — the Socratic questions shift aim back to generative, and the Phases run normally from wherever the dissolution lands. The mode stays Socratic throughout; what changes is what the questions are aimed at.
 
 **Student wants qualitative methodology.** Handled by Phase 3g's governing posture (three rules: never initiate, hold the quantitative-computational frame while the question is open, stop advocating after the joint decision). The teacher-consultation gate is the load-bearing check that resolves the question. See Phase 3g above for the operational detail.
 

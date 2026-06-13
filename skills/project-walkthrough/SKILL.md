@@ -1,6 +1,6 @@
 ---
 name: project-walkthrough
-description: The Project-track keystone — owns the student's position in the project (which cycle, which once-only sequence or cycle-template stage, which regime) and dispatches the project stage-skills in order. Reads project_paper_status.md into the position model, validates consistency, runs the rationale/seal/upstream precondition gates before each dispatch, integrates each skill's return payload (routing writing_handoff to paper-walkthrough via the pending-scaffold marker, acting on seal_state_change and new_cycle_decision deterministically), and owns the once-only sequence, the co-determination exception, and the new-cycle transition with the three-cycle hard cap. Coordinates with paper-walkthrough only through the shared state file. Status — draft, awaiting teacher-admin critique and educator review.
+description: The Project-track keystone — owns the student's position in the project (which cycle, which project initiation sequence or cycle-template stage, which regime) and dispatches the project stage-skills in order. Reads project_paper_status.md into the position model, validates consistency, runs the rationale/seal/upstream precondition gates before each dispatch, integrates each skill's return payload (routing writing_handoff to paper-walkthrough via the pending-scaffold marker, acting on seal_state_change and new_cycle_decision deterministically), and owns the project initiation sequence, the co-determination exception, and the new-cycle transition with the three-cycle hard cap. Coordinates with paper-walkthrough only through the shared state file. Status — draft, awaiting teacher-admin critique and educator review.
 ---
 
 # Project Walkthrough
@@ -50,15 +50,15 @@ On any failure the walkthrough does not auto-recover (a bad auto-recovery is cos
 
 | Position | When | Next dispatch |
 |---|---|---|
-| First-time once-only sequence entry | `year1-first-time`, `spine_complete = false`, `cycle_template_stage = null` | `design-project` (once-only sequence portion) |
-| Once-only sequence in progress | `spine_complete = false`, mid-sequence | resume `design-project` |
-| Once-only sequence done → Cycle 1 stage 1 | `spine_complete = true`, `current_cycle = 1`, `cycle_template_stage = 1` | `design-project` (method-approach portion) — the **co-determination exception** (below) |
+| First-time project initiation sequence entry | `year1-first-time`, `spine_complete = false`, `cycle_template_stage = null` | `design-project` (project initiation sequence portion) |
+| Project initiation sequence in progress | `spine_complete = false`, mid-sequence | resume `design-project` |
+| Project initiation sequence done → Cycle 1 stage 1 | `spine_complete = true`, `current_cycle = 1`, `cycle_template_stage = 1` | `design-project` (method-approach portion) — the **co-determination exception** (below) |
 | Mid-cycle planning, stage N (4–14) | `current_regime = planning`, `cycle_template_stage = N` | the stage-N skill (mapping below) |
 | Cycle just sealed | seal just set → `execution`, stage advances to 15 | the execution-regime skill |
 | Mid-cycle execution, stage N (15–18) | `current_regime = execution`, `cycle_template_stage = N` | the stage-N skill (stages 15–18 are the **research agent's** lane; this walkthrough hands the student across — below) |
 | Cycle complete; new-cycle transition | stage 18 complete → `current_regime = between-cycles` | `assess-new-cycle`, then the transition (below) |
 | Cycle 2/3 once-only-skip entry | `current_cycle ∈ {2,3}`, `cycle_template_stage = 1` | `begin-next-cycle` (owns later-cycle stages 1–2), then the template at stage 4 |
-| Junior-year restart | `year2-restart`, new `current_project_id` | `design-project` (full once-only sequence, fresh project) |
+| Junior-year restart | `year2-restart`, new `current_project_id` | `design-project` (full project initiation sequence, fresh project) |
 | Senior-fall refinement | `year3-refinement` | `compile-working-paper`, `framing-for-competition`; only an emergent new cycle reopens cycle dispatch |
 | Project closed | `current_regime = closed` | none — conclusion and abstract written (§4.4) |
 
@@ -105,9 +105,9 @@ On a dispatched skill's return, the walkthrough integrates the §5.1 payload and
 
 **The "next position" derivation (also `project-briefing`'s read-only mirror — resolves project-briefing open item 1).** After integration, the next position is derived deterministically, **blocker-first**: (1) if `stale_verdict` is non-empty and `current_regime = planning`, the next action is the paper track's stale gate (paper-walkthrough) — project-track dispatch waits; (2) else if a rationale/seal gate is unmet, that gate; (3) else the skill for the current `cycle_template_stage` per the mapping. `project-briefing` computes a *recommendation* from this same ordering read-only (it never dispatches); this walkthrough is the authoritative computer-and-dispatcher. The shared rule lives here so the two cannot diverge.
 
-## The once-only sequence and the co-determination exception
+## The project initiation sequence and the co-determination exception
 
-The once-only sequence (architecture spec §4.1) runs once per project: discipline interest → topic → research-problem identification. `project-walkthrough` advances it stage-by-stage (each once-only sequence stage's completion is a return-payload event), **except** the once-only-sequence stage 3 ↔ cycle-stage-1 boundary, which is the **one acknowledged exception to "stage-skills hold no private position state"** (contract §3.1). The research problem becomes real only against a method-approach that can address it, so `design-project` owns that co-determination conversation internally and returns both outcomes in one pass; the state file transitions `spine_complete: false, cycle_template_stage: null` → `spine_complete: true, cycle_template_stage: 1` **atomically** at integration. The walkthrough guarantees the atomicity at the integration write; the exception is scoped to this one conversation and does not generalize.
+The project initiation sequence (architecture spec §4.1) runs once per project: discipline interest → topic → research-problem identification. `project-walkthrough` advances it stage-by-stage (each project initiation sequence stage's completion is a return-payload event), **except** the once-only-sequence stage 3 ↔ cycle-stage-1 boundary, which is the **one acknowledged exception to "stage-skills hold no private position state"** (contract §3.1). The research problem becomes real only against a method-approach that can address it, so `design-project` owns that co-determination conversation internally and returns both outcomes in one pass; the state file transitions `spine_complete: false, cycle_template_stage: null` → `spine_complete: true, cycle_template_stage: 1` **atomically** at integration. The walkthrough guarantees the atomicity at the integration write; the exception is scoped to this one conversation and does not generalize.
 
 ## The new-cycle transition (and the three-cycle hard cap)
 
@@ -175,11 +175,11 @@ This skill is orchestration; most of its surface is silent state work. The stude
 
 **The third cycle completes.** The new-cycle transition routes to `closed` regardless of `assess-new-cycle`'s `new_cycle_decision` — the three-cycle cap is hard (§3.3). The mentor names the cap honestly if the student wants a fourth.
 
-**A Year-2 restart.** `program_phase = year2-restart` with a fresh `current_project_id` re-enters the full once-only sequence via `design-project`; the prior project's `decisions.md` is available as conversational context, not inherited verbatim (contract §9.3 default).
+**A Year-2 restart.** `program_phase = year2-restart` with a fresh `current_project_id` re-enters the full project initiation sequence via `design-project`; the prior project's `decisions.md` is available as conversational context, not inherited verbatim (contract §9.3 default).
 
 ## Where this skill lives in the architecture
 
-A **keystone walkthrough** dispatched by the mentor at conversation start when the student's intent is project-track (architecture spec §12), bundled in the project-mentor distribution (curator-immune, update-refreshed per platform primer §7). It reads `project_design.md` and `project_paper_status.md`; it writes the project-owned `project_paper_status.md` fields. It dispatches the ten project stage-skills and owns the once-only sequence, the co-determination exception, the new-cycle transition, and the three-cycle cap. It coordinates with `paper-walkthrough` through the state file alone. It is **not** a rationale trigger and **not** a model-escalation moment — it enforces those gates on behalf of the skills it dispatches. Authoring it (with `paper-walkthrough`) is the dispatch contract's promotion trigger (contract §12): once both are authored against the contract and a Cycle-1 end-to-end dispatch is simulated, the contract's substance promotes into architecture spec §12 and the contract retires.
+A **keystone walkthrough** dispatched by the mentor at conversation start when the student's intent is project-track (architecture spec §12), bundled in the project-mentor distribution (curator-immune, update-refreshed per platform primer §7). It reads `project_design.md` and `project_paper_status.md`; it writes the project-owned `project_paper_status.md` fields. It dispatches the ten project stage-skills and owns the project initiation sequence, the co-determination exception, the new-cycle transition, and the three-cycle cap. It coordinates with `paper-walkthrough` through the state file alone. It is **not** a rationale trigger and **not** a model-escalation moment — it enforces those gates on behalf of the skills it dispatches. Authoring it (with `paper-walkthrough`) is the dispatch contract's promotion trigger (contract §12): once both are authored against the contract and a Cycle-1 end-to-end dispatch is simulated, the contract's substance promotes into architecture spec §12 and the contract retires.
 
 ## Status
 
