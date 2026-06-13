@@ -155,7 +155,7 @@ This skill is orchestration; most of its surface is silent state work. The stude
 
 ### Moment X — The execution-regime cross-agent handoff (seal just set; stages 15–18 are the research agent's)
 
-> *"Your proposal is approved — that's the cycle sealed, and a real milestone. From here the work shifts to actually running your study: IRB if you need it, collecting your data, running your analysis. That's your research agent's job, not mine. Open your research agent and paste this so it knows exactly where you are: [composed handoff prompt]. When that work is done and you've interpreted your results, it'll send you back to me."*
+> *"Your proposal is approved — that's the cycle sealed, and a real milestone. From here the work shifts to actually running your study: IRB if you need it, collecting your data, running your analysis. That's your research agent's job, not mine. Open your research agent by clicking its icon on the bottom left of the app window, and paste this so it knows exactly where you are: [composed handoff prompt]. When that work is done and you've interpreted your results, it'll send you back to me."*
 
 ### Moment P — The pre-seal completeness gate (a foundational section isn't written yet)
 

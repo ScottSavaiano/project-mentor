@@ -49,7 +49,7 @@ If the mentor is uncertain whether a moment qualifies, the default is **not** to
 
 - **Automatically switch models.** Hermes does not support cascading auto-switches in this way, and this is by design. The skill recommends; the student executes. The deliberate act of switching is itself the pedagogical move.
 - **Report token costs.** That is `/usage`'s job, taught in Lesson 1. This skill does not surface or recommend cost tracking. For budget visibility, the `check-budget` skill is the appropriate path.
-- **Prompt the student to downgrade after the moment concludes.** The reference card from the TUI lessons covers `/model default`; the student's habit, once formed, will handle it. A downgrade prompt would itself be a form of nagging.
+- **Prompt the student to downgrade after the moment concludes.** The reference card from the setup lessons covers `/model default`; the student's habit, once formed, will handle it. A downgrade prompt would itself be a form of nagging.
 - **Generalize to the research or review agents.** This skill is initially project-mentor specific. The research and review agents have their own escalation considerations (probably narrower, since their work is less judgment-heavy), to be addressed in their own design phase.
 
 ## What this skill does
@@ -57,7 +57,7 @@ If the mentor is uncertain whether a moment qualifies, the default is **not** to
 When the mentor recognizes one of the listed high-judgment moments, it pauses its substantive response and delivers an upgrade recommendation. The recommendation contains three things:
 
 1. **A specific, situational statement of what the student is asking and why it benefits from stronger reasoning.** Not generic ("this is a hard question") but tied to the actual moment ("you are asking me to evaluate the soundness of your causal inference").
-2. **The exact command the student should type**, in the form taught in Lesson 1. The curriculum's stable form is the alias `/model careful` (which resolves through the profile's `model_aliases:` block to the current Opus identifier). The `/model` slash command preserves the conversation we are in — the student can switch and then simply tell the mentor to proceed; they should not need to re-ask their original question.
+2. **The exact command the student should type**, in the form taught in Lesson 1. The curriculum's stable form is the alias `/model careful` (which resolves through the profile's `model_aliases:` block to the current Opus identifier), typed into the desktop app's **Cmd+K command palette** — the **deliberate path the curriculum teaches** (the status-bar model picker also switches tiers with a click, but the typed command is the taught form, because choosing the careful tier *deliberately* is the pedagogical point; educator ruling 2026-06-13). The `/model` command preserves the conversation we are in — the student can switch and then simply tell the mentor to proceed; they should not need to re-ask their original question.
 3. **A short note that the student can return to the default after this work concludes** — `/model default` — so the student does not silently keep Opus running for routine work after the upgrade-worthy moment is done.
 
 After delivering the recommendation, the mentor **waits** for the student's response. The pause is what teaches the discipline of escalating when escalation matters; an upgrade prompt that the mentor immediately works around by answering anyway teaches the opposite lesson.
