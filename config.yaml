@@ -9,12 +9,16 @@
 # installer may have tuned it for their machine); pass --force-config
 # to reset it to the repo version.
 #
+# Version 0.2.1 (2026-06-15): careful tier updated Opus 4.7 -> Opus 4.8
+# (educator decision; see decision-log 2026-06-15). The 'careful' alias
+# now resolves to anthropic/claude-opus-4.8. No other shape change.
+#
 # Version 0.2.0 (2026-05-24): replaces v0.1.1's Opus-default-no-fallback
 # shape with the verified two-tier strategy from
 # `decision-history-and-rationale.md` Section 11 (rewritten 2026-05-24).
 # Default tier is Claude Haiku 4.5 (voice-tested as the strongest
 # SOUL-following model at the low end of the Anthropic family, auto-cached
-# by Hermes). Careful tier is Opus 4.7 (auto-cached, used for genuine
+# by Hermes). Careful tier is Opus 4.8 (auto-cached, used for genuine
 # high-judgment moments via /model careful). Fallback is Gemma 4 26B
 # paid via DekaLLM (academia-tagged, ZDR-verified, voice-tested as a
 # close-second). All eight auxiliary slots route to Gemma 4 26B paid
@@ -111,7 +115,7 @@ fallback_model:
 #
 # Two aliases:
 #   - `default` — Haiku 4.5, the routine-work tier. Auto-cached.
-#   - `careful` — Opus 4.7, deliberate upgrade for genuine high-judgment
+#   - `careful` — Opus 4.8, deliberate upgrade for genuine high-judgment
 #                 moments. Auto-cached (same Hermes Claude-on-OpenRouter
 #                 policy). The `model-escalation` skill prompts the
 #                 student to /model careful at a small named list of
@@ -128,7 +132,7 @@ model_aliases:
     model: anthropic/claude-haiku-4.5
     provider: openrouter
   careful:
-    model: anthropic/claude-opus-4.7
+    model: anthropic/claude-opus-4.8
     provider: openrouter
 
 # -------------------------------------------------------------------
@@ -197,10 +201,10 @@ auxiliary:
 # `agent/agent_runtime_helpers.py:anthropic_prompt_cache_policy`).
 # Strategy is `system_and_3`: cache_control breakpoints on system prompt
 # + last 3 non-system messages. Both Haiku 4.5 (default tier) and
-# Opus 4.7 (careful tier) are auto-cached on every call.
+# Opus 4.8 (careful tier) are auto-cached on every call.
 #
 # Empirical verification (2026-05-24): with ~13K-token system prompt on
-# Opus 4.7 through OpenRouter, cache-read calls cost 84% less than
+# Opus 4.8 through OpenRouter, cache-read calls cost 84% less than
 # baseline ($0.062 → $0.010). For Haiku 4.5 at the curriculum's typical
 # session shape (10K prompt, 500 completion, 10 turns), cached-effective
 # cost per session is ~$0.047 vs ~$0.125 uncached.
@@ -213,7 +217,7 @@ auxiliary:
 #
 # Scope note: `prompt_caching.cache_ttl` is a top-level config field, so
 # it applies to every Claude call regardless of alias — both the default
-# tier (Haiku 4.5) and the careful tier (Opus 4.7) pay the 2× write
+# tier (Haiku 4.5) and the careful tier (Opus 4.8) pay the 2× write
 # premium per cache breakpoint. For Haiku 4.5 at $1.25/M cache_write,
 # that's roughly $0.0125 per cached system prompt per session — at
 # 150 student-years × ~90 sessions/year, roughly $170/year for the

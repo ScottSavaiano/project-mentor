@@ -1,6 +1,6 @@
 ---
 name: model-escalation
-description: Recognize when a mentor conversation has entered a genuine high-judgment moment, and surface a specific, copy-pasteable recommendation that the student upgrade from the default tier (Haiku 4.5) to the careful tier (Opus 4.7) for that question. Fires at proposal review, methodology framing at load-bearing decision points, gap identification, new-cycle assessment, the scaffold no-blueprint case, integrity questions touching the demonstration-versus-production boundary, and substantive critical feedback on a submittable draft. Does not fire on routine clarifying questions, status check-ins, or follow-ups after the student has already upgraded. A meta-skill — the high-stakes mentor skills reference this one rather than re-implementing the policy.
+description: Recognize when a mentor conversation has entered a genuine high-judgment moment, and surface a specific, copy-pasteable recommendation that the student upgrade from the default tier (Haiku 4.5) to the careful tier (Opus 4.8) for that question. Fires at proposal review, methodology framing at load-bearing decision points, gap identification, new-cycle assessment, the scaffold no-blueprint case, integrity questions touching the demonstration-versus-production boundary, and substantive critical feedback on a submittable draft. Does not fire on routine clarifying questions, status check-ins, or follow-ups after the student has already upgraded. A meta-skill — the high-stakes mentor skills reference this one rather than re-implementing the policy.
 ---
 
 # Model Escalation
@@ -14,7 +14,7 @@ This skill is a **meta-policy**. It does not handle a research stage on its own.
 
 Other mentor skills — the small set that handle genuine high-judgment moments — reference this skill instead of carrying their own escalation logic. "When do we suggest upgrading, and how do we say it" is therefore editable in one place rather than scattered across the skill library.
 
-The reasoning behind the curriculum's model strategy — why Haiku 4.5 is the default tier, why Opus 4.7 is the deliberate upgrade, why the act of switching is itself pedagogically valuable — lives in `decision-history-and-rationale.md` Section 11. This skill operationalizes that strategy. It does **not** re-explain it to the student. The operating mechanics of the `/model` slash command and the dashboard model picker live in `hermes-platform-primer.md` Section 8.
+The reasoning behind the curriculum's model strategy — why Haiku 4.5 is the default tier, why Opus 4.8 is the deliberate upgrade, why the act of switching is itself pedagogically valuable — lives in `decision-history-and-rationale.md` Section 11. This skill operationalizes that strategy. It does **not** re-explain it to the student. The operating mechanics of the `/model` slash command and the dashboard model picker live in `hermes-platform-primer.md` Section 8.
 
 ## When this skill fires
 
@@ -118,4 +118,4 @@ This skill ships as a **bundled skill** in the project-mentor profile, registere
 
 ## Status
 
-**Draft, awaiting educator review.** The list of high-judgment moments, the recommendation register, the decline-handler behavior, and the integration pattern with the high-stakes skills are all open to refinement after the educator's first pass. This skill was drafted 2026-05-22 against an earlier model strategy and revised 2026-05-25 to align with the locked v0.2.0 strategy (Haiku 4.5 default, Opus 4.7 careful) and the teacher-admin critique findings (the decline-handler, the conversation-preserving switch language, the mid-response recognition rule).
+**Draft, awaiting educator review.** The list of high-judgment moments, the recommendation register, the decline-handler behavior, and the integration pattern with the high-stakes skills are all open to refinement after the educator's first pass. This skill was drafted 2026-05-22 against an earlier model strategy and revised 2026-05-25 to align with the locked v0.2.0 strategy (Haiku 4.5 default, Opus 4.7 careful) and the teacher-admin critique findings (the decline-handler, the conversation-preserving switch language, the mid-response recognition rule). Revised 2026-06-15 (Cowork): the careful tier was updated from Opus 4.7 to Opus 4.8 (educator decision; see decision-log 2026-06-15). The recommendation still routes through the /model careful alias, so only the explanatory model name changed here, not the command students type.

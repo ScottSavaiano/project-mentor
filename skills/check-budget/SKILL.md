@@ -47,7 +47,7 @@ The mentor reads the tool output and delivers the summary to the student in its 
 The translations are heuristics, not promises. The skill uses curriculum-verified per-session cost estimates from `decision-history-and-rationale.md` Section 11.1:
 
 - **Default tier (Haiku 4.5, cached effective):** ~$0.047 per 10-turn mentor session with the curriculum's typical ~10K-token system prompt + workspace context.
-- **Careful tier (Opus 4.7, cached effective):** ~$0.23 per 10-turn high-judgment consultation.
+- **Careful tier (Opus 4.8, cached effective):** ~$0.23 per 10-turn high-judgment consultation.
 
 These are session-shape averages, not exact predictions. The per-session estimate assumes the curriculum's typical session shape (about 10 turns, ~10K-token system prompt + workspace, ~500-token completions per turn). A student who routinely runs short consultations (3-4 turns) will see their actual cost-per-session run substantially below the estimate, and "N more sessions" will undercount their real remaining headroom. A student running long deep-work sessions (20+ turns) will burn through budget faster than the estimate predicts. The summary's mentor-voice framing makes the heuristic nature clear ("roughly," "at the rate you have been working"); the script does NOT yet personalize the estimate per-student based on their actual usage_daily ÷ daily-session-count. A future revision could pull that personalization in — for now, the unpersonalized estimate is the trade-off for keeping the skill simple. If the educator's `monitor-curriculum-models` skill (Tier 8) detects pricing changes for the curriculum's three models, the typical-cost values in this skill's script are updated in the same release.
 

@@ -8,7 +8,7 @@ and prints a formatted summary that the mentor can read aloud.
 Per-call cost translations rest on the curriculum's verified
 session-cost estimates from decision-history-and-rationale.md Section 11.1:
   - Default tier (Haiku 4.5, cached effective): ~$0.047 per 10-turn session
-  - Careful tier (Opus 4.7, cached effective):  ~$0.232 per 10-turn consultation
+  - Careful tier (Opus 4.8, cached effective):  ~$0.232 per 10-turn consultation
 If pricing changes (detected by the teacher-admin monitor-curriculum-models
 skill), update these constants in the same release.
 
@@ -28,7 +28,7 @@ import urllib.error
 import urllib.request
 
 DEFAULT_TIER_PER_SESSION = 0.047   # Haiku 4.5 cached effective, ~10-turn
-CAREFUL_TIER_PER_SESSION = 0.232   # Opus 4.7 cached effective, ~10-turn
+CAREFUL_TIER_PER_SESSION = 0.232   # Opus 4.8 cached effective, ~10-turn
 
 ENDPOINT = "https://openrouter.ai/api/v1/key"
 USER_AGENT = "hermes-research-curriculum/0.2.0 (check-budget)"
@@ -100,7 +100,7 @@ def _format_summary(data: dict) -> str:
 
     lines.append("At curriculum-typical use rates, your remaining budget is:")
     lines.append(f"  ~{default_sessions:,} more default-tier (Haiku 4.5) mentor sessions, OR")
-    lines.append(f"  ~{careful_consults:,} more careful-tier (Opus 4.7) consultations,")
+    lines.append(f"  ~{careful_consults:,} more careful-tier (Opus 4.8) consultations,")
     lines.append("  in any mix.")
     lines.append("")
     lines.append("(Sessions vary in length and depth; treat the numbers as rough guidance,")
