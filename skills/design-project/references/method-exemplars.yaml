@@ -9,6 +9,12 @@
 #
 # Last verified: 2026-06-04 (Cowork — every fetch:script URL tested with a scripted
 # client; every fetch:browser URL verified reachable in a browser context)
+# Updated: 2026-06-19 (Cowork — causal-graphs handoff: six entries added. New item 13
+# "Causal-graphical modeling and discovery" (Zhu/Tay/Zhang 2026 gold OA; Quintana 2023
+# educator-staged). Item 2 DAG-for-identification subsection (Rohrer 2018 gold OA;
+# Elwert & Winship 2014 educator-staged; Feng 2024 educator-staged; Wodtke/Harding/Elwert
+# 2011 PMC free). Catch-all renumbered 13->14. Citations/DOIs verified 2026-06-19; the new
+# fetch URLs still need the per-URL fetch test at staging. Pending educator ratification.)
 
 articles:
   - slug: gimbrone-2022
@@ -149,3 +155,49 @@ articles:
     menu_items: [12]
     fetch: script
     url: https://arxiv.org/pdf/2411.11581
+
+  # --- Causal-graphs handoff additions (2026-06-19, pending educator ratification) ---
+  # DAG-for-identification (woven into the causal cluster; keyed to item 2 where the enrichment lives)
+  - slug: rohrer-2018
+    citation: "Rohrer (2018). Thinking Clearly About Correlations and Causation: Graphical Causal Models for Observational Data. AMPPS 1(1)."
+    menu_items: [2]
+    fetch: browser
+    url: https://journals.sagepub.com/doi/10.1177/2515245917745629
+
+  - slug: elwert-winship-2014
+    citation: "Elwert & Winship (2014). Endogenous Selection Bias: The Problem of Conditioning on a Collider Variable. Annual Review of Sociology 40."
+    menu_items: [2]
+    fetch: browser
+    url: https://www.annualreviews.org/doi/10.1146/annurev-soc-071913-043455
+    backup_url: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2475582
+    note: educator-staged (paywalled); PDF placed in article-staging as 1-Elwert-Winship-2014.pdf
+
+  - slug: feng-2024
+    citation: "Feng (2024). Introduction to causal graphs for education researchers. Asia Pacific Education Review 25(3)."
+    menu_items: [2]
+    fetch: browser
+    url: https://link.springer.com/article/10.1007/s12564-024-09980-3
+    note: educator-staged (verify OA at staging; ERIC EJ1435918)
+
+  - slug: wodtke-harding-elwert-2011
+    citation: "Wodtke, Harding & Elwert (2011). Neighborhood Effects in Temporal Perspective. American Sociological Review 76(5). PMC author manuscript."
+    menu_items: [2, 3]
+    fetch: script
+    url: https://pmc.ncbi.nlm.nih.gov/articles/PMC3413291/
+    note: PMC author manuscript, free; also doubles as a social-epidemiology exemplar (item 3)
+
+  # Causal-graphical modeling and discovery (new item 13)
+  - slug: zhu-tay-zhang-2026
+    citation: "Zhu, Tay & Zhang (2026). Causal discovery methods in psychological research: Foundations, algorithms, and a practical tutorial in R. Behavior Research Methods 58, Art. 64."
+    menu_items: [13]
+    fetch: script
+    url: https://link.springer.com/content/pdf/10.3758/s13428-025-02841-w.pdf
+    backup_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC12904928/
+    reading_url: https://link.springer.com/article/10.3758/s13428-025-02841-w
+
+  - slug: quintana-2023
+    citation: "Quintana (2023). The Structure of Academic Achievement: Searching for Proximal Mechanisms Using Causal Discovery Algorithms. Sociological Methods & Research 52(1)."
+    menu_items: [13]
+    fetch: browser
+    url: https://journals.sagepub.com/doi/10.1177/0049124120926208
+    note: educator-staged (paywalled); ERIC EJ1365724

@@ -1,6 +1,6 @@
 # Method Exemplar Articles — the Baked-In Method-Approach Set
 
-**Last edited:** 2026-06-04 (Cowork — first draft; all access links verified full-text-accessible 2026-06-04. Second edit same day: Autor, Dorn & Hanson added to item 4 per educator review. Third edit same day: item 12 "Generative agent-based social simulation" added per the educator-approved menu addition — Park et al. 2023 + OASIS exemplars; the off-menu catch-all renumbered to 13)
+**Last edited:** 2026-06-19 (Cowork — causal-graphs handoff. New item 13 "Causal-graphical modeling and discovery" added with discovery exemplars Zhu/Tay/Zhang 2026 (gold OA) + Quintana 2023 (educator-staged); off-menu catch-all renumbered 13→14. Item 2 gains a "causal-graphical front-door (DAG-for-identification)" subsection — Rohrer 2018 (gold OA), Elwert & Winship 2014 (educator-staged), and the two educator-approved extras Feng 2024 and Wodtke/Harding/Elwert 2011 (PMC free) — keyed to the DAG enrichment woven into the causal cluster. All citations/DOIs verified against the publishing journals 2026-06-19; fetch URLs to be re-confirmed at staging. Pending educator ratification.) Prior: 2026-06-04 (Cowork — first draft; all access links verified full-text-accessible 2026-06-04. Second edit same day: Autor, Dorn & Hanson added to item 4 per educator review. Third edit same day: item 12 "Generative agent-based social simulation" added per the educator-approved menu addition — Park et al. 2023 + OASIS exemplars; the off-menu catch-all renumbered to 13)
 *Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
 
 **Status: Draft, awaiting educator review.** Resolves `design-project` open authoring item 1 (separate-file option, per the volume reasoning recorded there). Authored against architecture spec §2 (the Method Exemplar Articles definition), decision-history §6.1 (the menu), and the Regenerrific Methods Menu document (the mentor's own teaching descriptions).
@@ -36,6 +36,24 @@ Access: https://www.nber.org/system/files/working_papers/w4509/w4509.pdf (free w
 **Abadie, Diamond & Hainmueller (2010). "Synthetic Control Methods for Comparative Case Studies: Estimating the Effect of California's Tobacco Control Program." *JASA* 105(490), 493–505.**
 The paper that introduced synthetic control: when only one unit is treated (California's Prop 99), build a weighted combination of untreated states that tracks pre-treatment California, then measure the divergence. A strong exemplar of inventing a comparison group when nature doesn't supply one.
 Access: https://www.nber.org/system/files/working_papers/w12831/w12831.pdf (free working-paper version) · backup: https://www.law.upenn.edu/live/files/8950-abadie2010pdf
+
+**The causal-graphical starting point (DAG-for-identification).** These support the DAG-reasoning enrichment the mentor teaches before any specific causal design — drawing the graph, reading the back-door criterion, and deciding what the data can identify. (Note: "starting point" here is the entry step into the causal cluster, distinct from Pearl's technical *front-door criterion*, which is one specific identification route taught within it.) This reasoning is the entry point to the whole causal cluster (causal inference, social epidemiology, econometrics, experimental/quasi-experimental); these exemplars are keyed here because that is where the enrichment text lives.
+
+**Rohrer, J. M. (2018). "Thinking Clearly About Correlations and Causation: Graphical Causal Models for Observational Data." *Advances in Methods and Practices in Psychological Science* 1(1), 27–42.**
+The canonical accessible introduction to DAGs for social scientists — confounders, why we statistically control, and why colliders and mediators must *not* be controlled for, all carried on social-science examples. A model structure for a Methods section that justifies an adjustment strategy. Entry read — minimal math, conceptual; best first exposure.
+Access: https://journals.sagepub.com/doi/10.1177/2515245917745629 (gold OA, SAGE)
+
+**Elwert, F., & Winship, C. (2014). "Endogenous Selection Bias: The Problem of Conditioning on a Collider Variable." *Annual Review of Sociology* 40, 31–53.**
+A purely graphical account of selection/collider bias, separated cleanly from common-cause confounding and overcontrol bias, worked through examples across social stratification, political sociology, demography, and the sociology of education. The definitive treatment of the collider trap. Stronger students — more demanding, but worth it.
+Access: https://www.annualreviews.org/doi/10.1146/annurev-soc-071913-043455 (paywalled; author copy on SSRN abstract_id=2475582) · educator-staged
+
+**Feng, Y. (2024). "Introduction to causal graphs for education researchers." *Asia Pacific Education Review* 25(3), 595–609.**
+A DAG primer pitched at education researchers: the graphical criteria for identification and adjustment-set (covariate) selection, demonstrated on observational education examples where randomized experiments are impractical. A second accessible on-ramp, closest to the curriculum's own setting. Entry-to-mid read.
+Access: https://link.springer.com/article/10.1007/s12564-024-09980-3 (DOI 10.1007/s12564-024-09980-3; ERIC EJ1435918) · educator-staged
+
+**Wodtke, Harding & Elwert (2011). "Neighborhood Effects in Temporal Perspective: The Impact of Long-Term Exposure to Concentrated Disadvantage on High School Graduation." *American Sociological Review* 76(5), 713–736.**
+A DAG-motivated applied study: 4,154 children in the PSID, neighborhood context measured yearly from age 1 to 17, with causal methods for time-varying treatment used to recover the effect of sustained neighborhood disadvantage on high school graduation. The "see a full identification argument carried through to a result" exemplar — heavier (marginal structural models), so an aspirational applied model for stronger students. Doubles as a social-epidemiology exemplar (item 3). *Weight note may apply (concentrated disadvantage; racial disparities in the reported outcomes).*
+Access: https://pmc.ncbi.nlm.nih.gov/articles/PMC3413291/ (PMC author manuscript, free) · published ASR 76(5)
 
 ## 3. Social epidemiology
 
@@ -129,9 +147,19 @@ Access: https://arxiv.org/abs/2304.03442 (open access)
 A social-media simulator — dynamic networks, recommendation systems, posting and commenting agents — scalable from hundreds to a million agents, used to reproduce phenomena like information spread and group polarization. A strong exemplar of the system-level form of the method (and the open-source engine behind tools like MiroFish, which is the instrument a student's stretch version might actually run on). Scale-versus-cost is the design lesson: every agent and round is spend.
 Access: https://arxiv.org/abs/2411.11581 (open access)
 
-## 13. Other current approaches at the edge of the field
+## 13. Causal-graphical modeling and discovery
 
-**No baked-in exemplars — by design.** Per `design-project`'s off-menu edge case and decision-history §6.1, Method exemplars for an off-menu approach come from a literature search with the student, not from this file; the literature review (cycle-template stage 7) is the natural place they surface. This entry exists so the file's coverage of the menu is explicit: twelve items carry baked-in exemplars; the thirteenth (this catch-all) deliberately does not.
+**Zhu, G., Tay, L. Q., & Zhang, M. (2026). "Causal discovery methods in psychological research: Foundations, algorithms, and a practical tutorial in R." *Behavior Research Methods* 58, Article 64.**
+Surveys PC, FCI, GES, and LiNGAM and walks an R tutorial on the Health Behavior in School-Aged Children (HBSC) study to examine gender-specific mechanisms in bullying outcomes — subjects who are literally school-aged children, with runnable code. Teaches the exact scaffold the item needs: chains/forks/colliders, d-separation, equivalence classes (the CPDAG, and the partial ancestral graph — PAG — that FCI returns when hidden confounders are allowed), and the sufficiency / faithfulness / acyclicity assumptions. Entry read for the discovery route — tutorial format, accessible with teacher support; bridges concept to student-runnable analysis.
+Access: https://link.springer.com/article/10.3758/s13428-025-02841-w (gold OA, Springer; DOI 10.3758/s13428-025-02841-w)
+
+**Quintana, R. (2023). "The Structure of Academic Achievement: Searching for Proximal Mechanisms Using Causal Discovery Algorithms." *Sociological Methods & Research* 52(1), 85–134.**
+A genuine applied causal-discovery study in a top methods journal: four causal-search procedures run on a nationally representative dataset surface prior achievement, executive functions, and motivation as candidate direct causes of academic achievement (consistent with the data, not asserted), with explicit honesty about how scant social-science applications still are — the "edge of the field" positioning. An aspirational applied model — a full empirical paper, teacher-mediated; the "see a complete study" exemplar.
+Access: https://journals.sagepub.com/doi/10.1177/0049124120926208 (paywalled, SAGE; ERIC EJ1365724) · educator-staged
+
+## 14. Other current approaches at the edge of the field
+
+**No baked-in exemplars — by design.** Per `design-project`'s off-menu edge case and decision-history §6.1, Method exemplars for an off-menu approach come from a literature search with the student, not from this file; the literature review (cycle-template stage 7) is the natural place they surface. This entry exists so the file's coverage of the menu is explicit: thirteen items carry baked-in exemplars; the fourteenth (this catch-all) deliberately does not.
 
 ---
 
