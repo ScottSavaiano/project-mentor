@@ -14,12 +14,12 @@
 # educator-staged). Item 2 DAG-for-identification subsection (Rohrer 2018 gold OA;
 # Elwert & Winship 2014 educator-staged; Feng 2024 educator-staged; Wodtke/Harding/Elwert
 # 2011 PMC free). Catch-all renumbered 13->14. Citations/DOIs verified 2026-06-19; the new
-# fetch URLs still need the per-URL fetch test at staging. Pending educator ratification.)
+# fetch URLs still need the per-URL fetch test at staging. Educator-approved 2026-06-20.)
 # Updated: 2026-06-20 (Cowork — two paywalled exemplars swapped for open-access equivalents:
 # feng-2024 -> weidlich-2022 (Journal of Learning Analytics, gold OA, education DAG primer);
 # quintana-2023 -> colineaux-2025 (IJERPH, gold OA, applied causal discovery in social epi).
 # weidlich fetched+staged (587a4de); colineaux is gold OA but bot-blocks scripts -> browser-download.
-# Pending educator ratification.)
+# Educator-approved 2026-06-20.)
 
 articles:
   - slug: gimbrone-2022
@@ -161,7 +161,7 @@ articles:
     fetch: script
     url: https://arxiv.org/pdf/2411.11581
 
-  # --- Causal-graphs handoff additions (2026-06-19, pending educator ratification) ---
+  # --- Causal-graphs handoff additions (2026-06-19, educator-approved 2026-06-20) ---
   # DAG-for-identification (woven into the causal cluster; keyed to item 2 where the enrichment lives)
   - slug: rohrer-2018
     citation: "Rohrer (2018). Thinking Clearly About Correlations and Causation: Graphical Causal Models for Observational Data. AMPPS 1(1)."
