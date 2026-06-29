@@ -57,7 +57,7 @@ extracts text for any PDF lacking it. This is the expected path for a large frac
 
 ## The access posture (load-bearing)
 
-This skill **never circumvents paywalls or access controls.** A 403 from a host is a host asking for a browser or a subscription, and the script treats it as final — no retry tricks, no mirror hunting, no proxy suggestions. The mentor's register when an article is not freely fetchable: name the legitimate routes (the school library's databases, a public library card, asking the research teacher, emailing the corresponding author — authors nearly always share) and move on. Local copies are for personal study within the student's own research workspace; nothing in `articles/` is ever committed to a public repository or redistributed. This posture is part of the curriculum's research-integrity project initiation sequence, not an inconvenience to route around.
+This skill **never circumvents paywalls or access controls.** A 403 from a host is a host asking for a browser or a subscription, and the script treats it as final — no retry tricks, no mirror hunting, no proxy suggestions. The mentor's register when an article is not freely fetchable: name the legitimate routes (the school library's databases, a public library card, asking the research teacher or faculty mentor, emailing the corresponding author — authors nearly always share) and move on. Local copies are for personal study within the student's own research workspace; nothing in `articles/` is ever committed to a public repository or redistributed. This posture is part of the curriculum's research-integrity project initiation sequence, not an inconvenience to route around.
 
 ## Maintenance notes
 

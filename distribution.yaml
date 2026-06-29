@@ -21,7 +21,7 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.2.2
+version: 0.3.0
 
 description: |
   Project Mentor — high-judgment social science research mentor for
@@ -36,14 +36,14 @@ description: |
 author: "Dr. Savaiano (Bronx High School of Science Social Science Research Program)"
 license: "MIT"
 
-# Minimum Hermes version. v0.16.0 is the floor — the curriculum relies on
+# Minimum Hermes version. v0.17.0 is the floor (raised 2026-06-24) — the curriculum relies on
 # v0.16.0 "The Surface Release" features: the Hermes Desktop app as the
 # primary student surface, the session lifecycle event hooks the paper
 # round-trip syncs on (on_session_start / on_session_end), and the bundled
 # Google Workspace OAuth skill behind the Docs round-trip. (Raised from
 # >=0.12.0, 2026-06-13; earlier >=0.12.0 floor was the curator/bundled-skill
 # protection baseline.) See hermes-platform-primer.md, Sections 5 and 7.
-hermes_requires: ">=0.16.0"
+hermes_requires: ">=0.17.0"
 
 # -------------------------------------------------------------------
 # Environment variables required for install

@@ -3,292 +3,216 @@
 # Part of the Hermes Research Curriculum at Bronx Science.
 # Authoritative source: https://github.com/ScottSavaiano/project-mentor
 #
-# This file is one of three distribution files that ship in the
-# project-mentor repository, alongside SOUL.md and distribution.yaml.
-# On `hermes profile update`, config.yaml is preserved by default (the
-# installer may have tuned it for their machine); pass --force-config
-# to reset it to the repo version.
+# Ships alongside SOUL.md and distribution.yaml. On `hermes profile update`,
+# config.yaml is preserved by default; pass --force-config to reset it to the
+# repo version (and re-run student-install.sh to set terminal.cwd).
 #
-# Version 0.2.1 (2026-06-15): careful tier updated Opus 4.7 -> Opus 4.8
-# (educator decision; see decision-log 2026-06-15). The 'careful' alias
-# now resolves to anthropic/claude-opus-4.8. No other shape change.
+# NOTE: the agent cannot edit this file with its own tools (Hermes refuses
+# patch/write_file on config.yaml). Change settings with `hermes --profile
+# project-mentor config set <key> <value>`. Edits apply on the next `/new` session.
 #
-# Version 0.2.0 (2026-05-24): replaces v0.1.1's Opus-default-no-fallback
-# shape with the verified two-tier strategy from
-# `decision-history-and-rationale.md` Section 11 (rewritten 2026-05-24).
-# Default tier is Claude Haiku 4.5 (voice-tested as the strongest
-# SOUL-following model at the low end of the Anthropic family, auto-cached
-# by Hermes). Careful tier is Opus 4.8 (auto-cached, used for genuine
-# high-judgment moments via /model careful). Fallback is Gemma 4 26B
-# paid via DekaLLM (academia-tagged, ZDR-verified, voice-tested as a
-# close-second). All eight auxiliary slots route to Gemma 4 26B paid
-# to keep mechanical task costs low without dragging Haiku quality
-# upward when /model careful is invoked.
+# Version 0.3.6 (2026-06-25): defensive `delegation.model` pin — `delegation.model: ''` → `google/gemma-4-26b-a4b-it`
+#   (provider already openrouter). Rationale: Hermes v0.17.0 makes TOP-LEVEL `delegate_task` BACKGROUND-BY-DEFAULT
+#   (`_model_background_value`: "Delegations from the top-level agent always run in the background — the model does
+#   not choose"). The curriculum is NOT adopting subagent delegation (decision-log 2026-06-25 — DEFER), but with
+#   background-by-default an accidental/learned delegation would otherwise run on whatever the main tier is and bleed
+#   to the Wizard (Kimi) tier during a `/model careful` escalation. Pinning to Gemma is a cheap defensive floor so any
+#   stray subagent stays cheap. Reverses the prior deliberate-empty/inherit choice below (the mentor delegates rarely,
+#   so a cheap floor costs nothing). research-agent was already pinned (v0.1.0); review-agent carries the pin at Tier 3.
+#
+# Version 0.3.5 (2026-06-23): added a deterministic Kimi fallback — `provider_routing.order` is now
+#   [nextbit, siliconflow, modelrun]. SiliconFlow (fp8) was measured the slowest + least reliable Kimi
+#   endpoint of 20 (TTFT p50 5.9s, 89% uptime); kept as primary for fp8 quality at the careful tier, but
+#   ModelRun (fp4, fast, 99.9% uptime, verified reasoning-capable 6/6) now backs it so the ~11% downtime
+#   never fails an escalation. DeepInfra/Parasail were rejected — they error whenever reasoning is on.
+#
+# Version 0.3.4 (2026-06-23): set `agent.reasoning_effort: high` (was Hermes default) for program-wide
+#   consistency with the research-agent and teacher-admin profiles (both high). Tradeoff: strengthens the
+#   Kimi careful tier's reasoning but adds thinking-token cost on every Gemma daily turn (the mentor's
+#   highest-volume surface). MEASURED 2026-06-23 (gemma-4-26b, 3 runs/level): low≈medium≈high (~700-820
+#   reasoning tokens — the effort knob barely scales Gemma); the real step is reasoning ON vs OFF (ON ≈
+#   doubles completion, ~600→~1300 tokens/turn). So 'high' costs ~nothing over 'medium' here (~$15/cohort/yr
+#   worst case off→high). Dialing to 'medium' would NOT meaningfully cut daily burn; the only effective daily
+#   lever is OFF (rejected — dumbs the model). The effort LEVEL is a real cost lever mainly on the Kimi tier.
+#
+# Version 0.3.3 (2026-06-23): pinned the Gemma daily tier to NextBit (bf16, 99.7% uptime, 5/5 live)
+#   via `provider_routing.order: [nextbit, siliconflow]`. NextBit was chosen specifically because it
+#   serves Gemma but NOT Kimi — so a single profile-wide `order` routes Gemma→NextBit (bf16) AND
+#   Kimi→SiliconFlow (fp8) with no collision. Novita (bf16, 99.9%) was the first pick but it ALSO serves
+#   Kimi, so [novita, siliconflow] silently sent Kimi to Novita (unknown quant) and defeated the fp8 pin
+#   — rejected. DekaLLM (cheaper bf16, $0.06) failed 5/5 live calls — rejected. allow_fallbacks stays ON.
+#
+# Version 0.3.2 (2026-06-23): added `provider_routing.order: [siliconflow]` — pins the Kimi
+#   careful tier to SiliconFlow, the only fp8 Kimi K2.6 endpoint of 20 (also ZDR-listed). Lowercase slug
+#   verified to route on the live API; profile-wide but harmless to Gemma/Opus (they fall back).
+#
+# Version 0.3.1 (2026-06-23): corrected for verified Hermes behaviors (decision-log
+#   2026-06-23; primer §8/§10). Changes from 0.3.0:
+#   - **`@preset/…` removed — Hermes has no preset mechanism.** The careful tier and the
+#     fallback now use the plain model id `moonshotai/kimi-k2.6` (note the `ai`).
+#   - ZDR for Kimi now rides the OpenRouter **account-level** enforcement (already set),
+#     not a preset provider-pin.
+#   - Kimi reasoning: keep it ON at full strength. The effort knob is `agent.reasoning_effort`
+#     (global; verified `chat_completions.py` maps it to Kimi's top-level `reasoning_effort`) —
+#     NOT `none`, which would dumb the model down. `display.show_reasoning: false` hides the trace
+#     (display-only). The occasional inline CoT *leak* is a provider-routing artifact, not an
+#     effort/show_reasoning matter — fix by pinning Kimi's OpenRouter backend if it resurfaces.
+#     (Corrects the earlier "set effort none/desktop-preset" note. See decision-log 2026-06-23.)
+#   - **Auxiliary pin extended to all 14 slots** (was 8) — Hermes exposes 14.
+#   - Added a `delegation:` block (subagent model) and `model.persist_switch_by_default: false`.
+#
+# Version 0.3.0 (2026-06-18): all-OpenRouter; Daily=Gemma, Wizard=Kimi-preset (superseded —
+#   the `@preset` references did not work; see 0.3.1).
+# Version 0.2.x: Haiku-default / Opus-careful (superseded).
 
 # -------------------------------------------------------------------
-# Main model — default tier (Haiku 4.5)
+# Main model — Daily tier (Gemma 4 26B via OpenRouter)
 # -------------------------------------------------------------------
-# Default selection criterion for the MAIN model (decision-history
-# Section 11.1, 2026-05-24):
-# (1) acceptable privacy posture under the curriculum's OpenRouter
-# guardrails — specifically the no-train + no-publish account-wide filters
-# plus ZDR-verified provider routing; (2) voice that follows the mentor
-# SOUL's commitments (don't flatter, don't validate unearned, demonstration-
-# vs-production boundary, "ask the next useful question"); (3) reliable at
-# curriculum scale across ~150 student-years of usage; (4) auto-cached by
-# Hermes through OpenRouter (which requires a Claude-family model — see
-# `agent/agent_runtime_helpers.py:anthropic_prompt_cache_policy` in the
-# Hermes source).
-#
-# These four criteria govern the MAIN model only. The auxiliary slots
-# (further down this file) intentionally exempt the auto-caching criterion
-# because auxiliary tasks are short-lived and caching would not deliver
-# meaningful savings; the rest of the criteria still apply.
-#
-# Claude Haiku 4.5 satisfies all four. The voice test on 2026-05-24 against
-# the actual project-mentor SOUL placed Haiku 4.5 as the strongest of
-# Haiku-3 / Haiku-3.5 / Haiku-4.5 / Gemma-4-26B / gpt-oss-120b on every
-# prompt covering routine work, proposal review with weak elements,
-# integrity-boundary requests, and stuck-student Socratic moments. Older
-# Haiku variants slipped into flattery on routine prompts; gpt-oss-120b
-# violated the demonstration-vs-production boundary; Gemma was a defensible
-# close-second but lacks Hermes auto-caching.
-#
-# Posted pricing is uniform across Haiku 4.5's providers ($1.00/M input,
-# $5.00/M output, $0.10/M cache_read, $1.25/M cache_write). OpenRouter
-# routes among Amazon Bedrock, Google Vertex, and Anthropic direct — all
-# three are on OpenRouter's ZDR endpoint list and pass the curriculum's
-# guardrails. No provider pinning is required.
-
+# The everyday/startup model. Private (ZDR + account guardrails), low-cost, voice-validated
+# on the tuned SOUL. See decision-history §11.
 model:
   provider: openrouter
-  default: anthropic/claude-haiku-4.5
+  default: google/gemma-4-26b-a4b-it
   base_url: ''
   api_mode: chat_completions
+  # Switches (picker or /model) are SESSION-ONLY — they do NOT rewrite this file.
+  # (Hermes default is true = persist; false is the curriculum's choice so careful↔default
+  # upgrades never silently change the baseline. Verified 2026-06-23.)
+  persist_switch_by_default: false
 
 # -------------------------------------------------------------------
-# Fallback model — single-shot rescue if default fails
+# Reasoning — keep it ON at full strength; hide the trace from students
 # -------------------------------------------------------------------
-# `fallback_model:` triggers once per session if the main model errors
-# (rate limit, server failure, auth issue), preserving conversation state.
-# This is a single safety net, not a cascade — see platform primer 8.4.
-#
-# Pick: Gemma 4 26B paid via OpenRouter. Three reasons.
-# (1) Different vendor chain from Anthropic — independent rate-limit
-# windows, so Haiku rate-limiting doesn't propagate to the fallback.
-# (2) Academia-tagged, ZDR-verified across all 8 providers on OpenRouter's
-# ZDR list, passes the curriculum's account guardrails.
-# (3) Voice-tested (2026-05-24) as a close-second to Haiku 4.5 — direct,
-# asks before answering on routine and Socratic prompts, strong on the
-# demonstration-vs-production boundary, slightly more curt than Haiku
-# but still SOUL-aligned.
-#
-# Provider routing note: Hermes's fallback_model schema only recognizes
-# `provider` and `model` fields (verified 2026-05-25 in
-# `agent/agent_init.py` and `hermes_cli/config.py`). OpenRouter's
-# request-level `provider: {order: [...]}` parameter is not exposed on
-# the fallback_model entry. So we cannot pin to DekaLLM (cheapest at
-# $0.06/M input) directly from this config; OpenRouter routes via its
-# standard provider preferences (uptime/latency/cost mix) across the
-# 8 ZDR-verified Gemma providers. The trade-off: marginal cost variance
-# ($0.06-$0.16/M input across providers) on what is a rare rescue path
-# in practice — acceptable. If the educator wants to pin a specific
-# provider later, the OpenRouter org admin surface allows shrinking the
-# allowed provider set for the whole organization, which Hermes inherits.
+# Reasoning EFFORT is the `agent.reasoning_effort` knob (global; verified `chat_completions.py`
+# maps it to Kimi's top-level `reasoning_effort`). Keep Kimi at full strength — do NOT set it to
+# `none`/disabled (that dumbs the model down). `display.show_reasoning: false` (also the Hermes
+# default) hides the reasoning recap from students — display-only; the model still reasons. It does
+# NOT stop an inline-CoT *leak* (a provider-routing artifact — a backend emitting reasoning in
+# content — fixed by pinning Kimi's OpenRouter backend if it resurfaces). DECIDED 2026-06-23:
+# `agent.reasoning_effort: high` (set below) — program-wide consistency with the research-agent and
+# teacher-admin profiles. It helps the Kimi careful tier's reasoning but adds thinking-token cost on
+# every Gemma daily turn. Measured 2026-06-23: on Gemma, low≈medium≈high (the effort knob barely scales
+# it) — the cost is reasoning ON vs OFF (~2x completion), so 'high' costs ~nothing over 'medium' (~$15/
+# cohort/yr worst case). Never set it to `none` (that disables thinking and dumbs the model down).
+agent:
+  reasoning_effort: high
+display:
+  show_reasoning: false
 
+# -------------------------------------------------------------------
+# Fallback model — single-shot rescue if the Daily model errors
+# -------------------------------------------------------------------
+# A different-vendor rescue (Gemma→Gemma is useless once Gemma is the main). Plain id, since
+# `@preset` is unsupported. ZDR via account-level enforcement.
 fallback_model:
   provider: openrouter
-  model: google/gemma-4-26b-a4b-it
+  model: moonshotai/kimi-k2.6
+
+# -------------------------------------------------------------------
+# Provider routing — Gemma→NextBit; Kimi→SiliconFlow (fp8) + ModelRun fast fallback
+# -------------------------------------------------------------------
+# Top-level `provider_routing` (verified cli.py:3608) → OpenRouter `extra_body.provider`.
+# There is ONE `order` list per profile — a single global preferred-provider chain for ALL models.
+# OpenRouter picks the first provider in the list that serves the requested model:
+#   - nextbit     → Gemma daily. bf16, 99.7% uptime; serves Gemma but NOT Kimi — the whole point:
+#                   it can't hijack the Kimi pin (Novita would — it serves both).
+#   - siliconflow → Kimi careful PRIMARY. The only fp8 Kimi K2.6 endpoint (rest are int4/fp4/unknown),
+#                   ZDR-listed — chosen for quality at the careful tier. BUT measured 2026-06-23 it is the
+#                   SLOWEST + LEAST RELIABLE Kimi endpoint of 20: TTFT p50 5.9s (p90 12.7s), 26 tok/s, 89%
+#                   uptime — so a careful answer takes ~30s and ~11% of calls would fail without a fallback.
+#   - modelrun    → Kimi careful FALLBACK. fp4, ZDR, 0.5s TTFT, 87 tok/s, 99.9% uptime, $3.40, and verified
+#                   reasoning-capable (6/6 with reasoning:high 2026-06-23). Deterministic fast rescue for
+#                   SiliconFlow's downtime so an escalation never fails. NOTE: most "listed" Kimi providers
+#                   ERROR when reasoning is ON (DeepInfra, Parasail) — unusable for the careful tier; only
+#                   ModelRun + Together passed. ModelRun chosen over Together (confirmed fp4 vs unknown quant,
+#                   cheaper). The fallback is fp4 (a quant step below fp8) — acceptable on the rare outage path.
+# allow_fallbacks stays ON (default). Use `order`, NOT `only`. Lowercase slugs verified to route 2026-06-23.
+#
+# CAVEAT — "one pin per profile" (flagged by the teacher-admin Hermes agent, confirmed 2026-06-23):
+# because `order` is global, a Gemma daily provider that ALSO served Kimi would force Kimi onto it and
+# break the fp8 pin. We avoid that here by picking NextBit (Gemma-only). If a FUTURE profile's daily
+# provider overlaps its careful model, a static list can't separate them — the model-escalation skill
+# must re-pin provider_routing at `/model careful` time (dynamic), then revert at `/model default`.
+# Does NOT propagate to aux slots (independent, by Hermes design).
+provider_routing:
+  order:
+    - nextbit       # Gemma daily — bf16, 99.7% uptime; does NOT serve Kimi (keeps the pins separate)
+    - siliconflow   # Kimi careful PRIMARY — fp8 (best quant, but slow: 5.9s TTFT, 89% uptime)
+    - modelrun      # Kimi careful FALLBACK — fp4, fast (0.5s TTFT, 87 tok/s), 99.9% uptime, reasoning-capable
 
 # -------------------------------------------------------------------
 # Model aliases — student vocabulary for /model
 # -------------------------------------------------------------------
-# Named shortcuts for the `/model <alias>` slash command in the TUI.
-# Students learn these in Lesson 1 (the ten-command reference) and revisit
-# them in Lesson 6 ("Model Selection as a Methodological Act").
-#
-# Vocabulary is deliberately methodological, not utilitarian. The alias
-# names describe the work the STUDENT is doing — default vs careful —
-# rather than the model's brand or capability. This reinforces the
-# lesson framing: model selection is itself a methodological act, not a
-# cost-optimization knob.
-#
-# Two aliases:
-#   - `default` — Haiku 4.5, the routine-work tier. Auto-cached.
-#   - `careful` — Opus 4.8, deliberate upgrade for genuine high-judgment
-#                 moments. Auto-cached (same Hermes Claude-on-OpenRouter
-#                 policy). The `model-escalation` skill prompts the
-#                 student to /model careful at a small named list of
-#                 moments (proposal review, methodology framing at
-#                 load-bearing decisions, gap identification, integrity
-#                 questions, substantive draft critique).
-#
-# After a /model careful upgrade, the student returns to the day-to-day
-# tier with `/model default` — covered in Lesson 1's reference card and
-# in every `model-escalation` recommendation's closing line.
-
+# `default` (everyday) — Gemma 4 26B.
+# `careful` (wizard)  — Kimi K2.6 (plain id; was the now-removed @preset). The
+#   `model-escalation` skill prompts `/model careful` at the named high-judgment moments;
+#   `/model default` returns. With persist_switch_by_default:false these are session-only.
 model_aliases:
   default:
-    model: anthropic/claude-haiku-4.5
     provider: openrouter
+    model: google/gemma-4-26b-a4b-it
   careful:
-    model: anthropic/claude-opus-4.8
     provider: openrouter
+    model: moonshotai/kimi-k2.6
 
 # -------------------------------------------------------------------
-# Auxiliary task slots — all eight pinned to Gemma 4 26B paid
+# Delegation — the model subagents (delegate_task) run on
 # -------------------------------------------------------------------
-# Hermes has eight auxiliary task slots — side-jobs the agent offloads
-# to a separate model. Each defaults to `auto` (inherit from main model).
-#
-# Hermes's auto-inheritance creates the Opus-bleed-up risk documented in
-# platform primer Section 8.3: when a student runs `/model careful` to
-# upgrade to Opus, all eight auxiliary tasks would silently start running
-# on Opus too unless explicitly pinned. Pinning prevents that bleed.
-#
-# Curriculum choice: pin all eight to `google/gemma-4-26b-a4b-it` paid
-# via OpenRouter (DekaLLM provider, $0.06/M input). Reasons:
-# (1) Gemma 4 26B is cheap enough that running the eight mechanical slots
-# at curriculum scale (150 student-years) costs ~$30/year combined —
-# trivial against the school AI budget.
-# (2) ZDR-verified across all eight providers, academia-tagged,
-# voice-tested as competent for substantive prompts.
-# (3) NOT a Claude model, so it does NOT auto-cache via Hermes — but
-# auxiliary tasks are short-lived (skill discovery, web extraction,
-# compression), so caching would not deliver meaningful savings anyway.
-# (4) Different model family from the main tiers (Haiku/Opus) — keeps
-# the curriculum's cost-attribution clean: main-tier conversation traffic
-# vs mechanical-side traffic show up as distinct lines on OpenRouter's
-# usage analytics.
-#
-# Platform primer Section 8.3 documents the three quality-sensitive slots
-# (`approval`, `compression`, `title`) for which a weaker model carries
-# real cost. The 2026-05-24 voice test established that Gemma 4 26B is
-# competent on substantive prompts; the educator can revisit these three
-# slots specifically if calibration ever shows quality drift.
+# PINNED to Gemma (defensive, v0.3.6 2026-06-25). Empty would mean subagents inherit the session's
+# CURRENT main model (full agent loop, not a router; verified delegate_tool.py) — so during a
+# `/model careful` escalation a subagent would follow up to Kimi. v0.17.0 makes top-level delegation
+# BACKGROUND-BY-DEFAULT, and the curriculum is NOT adopting subagent delegation (decision-log
+# 2026-06-25 — DEFER); pinning Gemma is a cheap floor so any stray/learned delegation stays cheap and
+# can't bleed to the Wizard tier. (Reverses the prior deliberate-empty choice; the mentor delegates
+# rarely, so the floor costs nothing. research-agent was already pinned; review-agent at Tier 3.)
+delegation:
+  provider: openrouter
+  model: google/gemma-4-26b-a4b-it
 
+# -------------------------------------------------------------------
+# Auxiliary task slots — all 14 pinned to Gemma 4 26B
+# -------------------------------------------------------------------
+# Pinned explicitly (not auto/inherit) so a `/model careful` upgrade never bleeds the
+# background jobs up to the Wizard tier. Hermes exposes 14 slots (verified 2026-06-23 — the
+# earlier config pinned only 8). Empirically validated 2026-06-20 (aux_test.py): gemma-4-26b
+# is adequate on the high-stakes slots (compression, approval, vision). NOTE: `curator` here
+# is the aux-job *model* slot, distinct from the top-level `curator.enabled` below.
 auxiliary:
-  web_extract:
-    provider: openrouter
-    model: google/gemma-4-26b-a4b-it
-  vision:
-    provider: openrouter
-    model: google/gemma-4-26b-a4b-it
-  session_search:
-    provider: openrouter
-    model: google/gemma-4-26b-a4b-it
-  mcp:
-    provider: openrouter
-    model: google/gemma-4-26b-a4b-it
-  skills_hub:
-    provider: openrouter
-    model: google/gemma-4-26b-a4b-it
-  title:
-    provider: openrouter
-    model: google/gemma-4-26b-a4b-it
-  compression:
-    provider: openrouter
-    model: google/gemma-4-26b-a4b-it
-  approval:
-    provider: openrouter
-    model: google/gemma-4-26b-a4b-it
+  vision:             { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  web_extract:        { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  compression:        { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  skills_hub:         { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  approval:           { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  mcp:                { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  title_generation:   { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  tts_audio_tags:     { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  triage_specifier:   { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  kanban_decomposer:  { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  profile_describer:  { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  curator:            { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  monitor:            { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  session_search:     { provider: openrouter, model: google/gemma-4-26b-a4b-it }
 
 # -------------------------------------------------------------------
-# Prompt caching — 1-hour TTL applied to all Claude calls
+# Prompt caching — 1-hour TTL (Claude-only mechanism; moot for this profile)
 # -------------------------------------------------------------------
-# Hermes auto-enables Anthropic prompt caching for Claude models routed
-# through OpenRouter (verified by source inspection 2026-05-24 in
-# `agent/agent_runtime_helpers.py:anthropic_prompt_cache_policy`).
-# Strategy is `system_and_3`: cache_control breakpoints on system prompt
-# + last 3 non-system messages. Both Haiku 4.5 (default tier) and
-# Opus 4.8 (careful tier) are auto-cached on every call.
-#
-# Empirical verification (2026-05-24): with ~13K-token system prompt on
-# Opus 4.8 through OpenRouter, cache-read calls cost 84% less than
-# baseline ($0.062 → $0.010). For Haiku 4.5 at the curriculum's typical
-# session shape (10K prompt, 500 completion, 10 turns), cached-effective
-# cost per session is ~$0.047 vs ~$0.125 uncached.
-#
-# TTL options are `"5m"` (Anthropic default) or `"1h"`. The 1h tier costs
-# 2× the base prompt rate on cache write (vs 1.25× for 5m) but amortizes
-# across sessions with thinking pauses longer than 5 minutes. Curriculum
-# sessions routinely have such pauses (Socratic prompting, looking up
-# references, switching to other applications). Setting 1h.
-#
-# Scope note: `prompt_caching.cache_ttl` is a top-level config field, so
-# it applies to every Claude call regardless of alias — both the default
-# tier (Haiku 4.5) and the careful tier (Opus 4.8) pay the 2× write
-# premium per cache breakpoint. For Haiku 4.5 at $1.25/M cache_write,
-# that's roughly $0.0125 per cached system prompt per session — at
-# 150 student-years × ~90 sessions/year, roughly $170/year for the
-# curriculum to pay this write premium on the default tier specifically
-# (vs the 1.25× 5m-TTL alternative on Haiku alone). Hermes does not
-# currently expose per-alias TTL overrides; if it ever does, the
-# default tier could drop to 5m TTL while the careful tier keeps 1h.
-# Until then, the curriculum accepts the modest write premium on the
-# default tier as the cost of clean cross-tier behavior.
-#
-# Hermes prints `💾 Prompt caching: ENABLED (auto, 1h TTL)` at session
-# start so the student can see it active.
-
+# Every tier here is non-Claude (Gemma / Kimi), so nothing auto-caches. Harmless; kept for
+# consistency across profiles (teacher-admin runs Opus and benefits).
 prompt_caching:
   cache_ttl: "1h"
 
 # -------------------------------------------------------------------
-# Terminal — shared workspace
+# Terminal — shared workspace (student-install.sh rewrites cwd)
 # -------------------------------------------------------------------
-# All three student-facing profiles (mentor, research, review) share a
-# single workspace at ~/research-curriculum/ on the student's machine,
-# set as `terminal.cwd`. This is the shared-workspace architecture: the
-# profiles are state-isolated (memory, sessions per profile) but
-# filesystem-shared. Knowledge transfer between agents happens through
-# the workspace files — `project_design.md`, `reference_articles.md`,
-# `paper_structure.md`, `decisions.md`, `working_paper.md`,
-# `project_paper_status.md`, and the `journals/` directory.
-#
-# On the `local` backend, `cwd: "."` means "the directory Hermes was
-# launched from" — NOT the profile directory. An explicit absolute path
-# is required.
-#
-# IMPORTANT: the shipped value below is a CHANGE_ME placeholder, not a
-# usable path. The student install script (`student-install.sh`) rewrites
-# this to the correct absolute path on first install — typically
-# `/Users/<username>/research-curriculum` on macOS, or
-# `/home/<username>/research-curriculum` on Windows. Shipping a CHANGE_ME
-# rather than `~/research-curriculum` is deliberate: it fails loudly if
-# anyone runs Hermes against this config directly from a clone without
-# going through the install script (which would otherwise silently write
-# workspace files to whatever directory Hermes was launched from, since
-# `cwd: "."` is the local-backend default for unset values and `~` is
-# not reliably expanded by Hermes on every platform).
-
 terminal:
   backend: local
   cwd: /CHANGE_ME/research-curriculum
   timeout: 180
 
 # -------------------------------------------------------------------
-# Curator — disabled on student-facing profiles
+# Curator (top-level) — skill-pruning curator, disabled on student profiles
 # -------------------------------------------------------------------
-# Hermes's autonomous curator (default-on, ~7-day cron) consolidates,
-# archives, and patches skills. As of v0.16.0 (PR #36701) it can also
-# prune UNUSED BUILT-IN (bundled) skills — not just agent-created ones.
-# That puts the curriculum's rarely-invoked bundled skills at risk on
-# student machines over time (assess-new-cycle, begin-next-cycle,
-# framing-for-competition, and any once-per-cycle / once-per-year skill).
-#
-# Decision (educator, 2026-06-10): disable the curator on the three
-# student-facing profiles rather than `hermes curator pin` each low-usage
-# skill. Rationale: skills load on demand and are NOT all sent with each
-# API call, so unused skills cause no per-call cost bloat — there is no
-# cost pressure the curator's tidying relieves for this use case — and
-# disabling removes the bundled-skill pruning risk wholesale in one line
-# rather than a pin per skill (and per future skill). Disabling does NOT
-# affect `hermes update`'s refresh of bundled skills (separate mechanism).
-# The teacher-admin profile keeps the curator at the educator's discretion.
-# See platform primer Sections 7 and 9 (decision logged 2026-06-10).
-# Provisioning note: apply this same `curator.enabled: false` to the
-# research-agent and review-agent config.yaml when those profiles are built.
-
+# Distinct from auxiliary.curator above (that's the model the curator job uses). This switch
+# disables the v0.16.0 skill-pruning behavior so rarely-invoked curriculum skills aren't pruned.
 curator:
   enabled: false
