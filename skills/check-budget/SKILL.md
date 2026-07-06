@@ -79,9 +79,9 @@ The mentor's tone is honest and useful — not moralizing about spending, not co
 
 ## Where this skill lives in the architecture
 
-This skill ships as a **bundled skill** in the project-mentor profile, registered in the profile's `.bundled_manifest`. Bundled status is what makes it student-unmodifiable, curator-immune, and refreshed by profile updates (the protection model is documented in `hermes-platform-primer.md` Section 7). The script lives at `skills/check-budget/scripts/check_budget.py` within the skill directory.
+This skill ships as a **bundled skill** in the project-mentor profile, registered in the profile's `.bundled_manifest`. Bundled status is what makes it student-unmodifiable, curator-protected, and refreshed by profile updates (the protection model is documented in `hermes-platform-primer.md` Section 7). The script lives at `skills/check-budget/scripts/check_budget.py` within the skill directory.
 
-The research-agent and review-agent profiles will eventually ship copies of this skill — the same script and SKILL.md, just bundled into each profile so it is available regardless of which agent the student is talking to.
+The **research-agent profile now ships a copy** (re-bundled 2026-06-29); the review-agent profile will ship the same when built — the same script and SKILL.md in each profile so it is available regardless of which agent the student is talking to.
 
 ## Status
 

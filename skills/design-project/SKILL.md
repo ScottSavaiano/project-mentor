@@ -244,7 +244,7 @@ Summary, by file:
 
 ## Where this skill lives in the architecture
 
-`design-project` is a **project-track stage-skill** dispatched by `project-walkthrough`. It is bundled in the project-mentor profile distribution (registered in the profile's `.bundled_manifest`), making it student-unmodifiable, curator-immune, and refreshed by profile updates per platform primer §7's skill-protection model.
+`design-project` is a **project-track stage-skill** dispatched by `project-walkthrough`. It is bundled in the project-mentor profile distribution (registered in the profile's `.bundled_manifest`), making it student-unmodifiable, curator-protected, and refreshed by profile updates per platform primer §7's skill-protection model.
 
 Per dispatch contract §4.5 (terminology partition), the "stage-skill" classification refers to dispatch source, not write target. As of the 2026-06-08 paper-scaffolding design the write-target partition is clean: `design-project` writes `project_design.md`, `reference_articles.md`, and `decisions.md` (its project-track substance and rationale), and — for the research-problem section in Phase 5 — it returns the `writing_handoff` rather than writing `working_paper.md` (the paper track lays the scaffold and the student writes; contract §4.5/§4.6; spec §5.4). The earlier "documented cross-cutting case" in which this skill wrote its foundational section into `working_paper.md` inline is superseded by the handoff model.
 

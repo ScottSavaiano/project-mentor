@@ -68,7 +68,7 @@ This skill **never circumvents paywalls or access controls.** A 403 from a host 
 
 ## Where this skill lives in the architecture
 
-A **supporting skill** of the project-mentor profile, bundled (registered in `.bundled_manifest`), curator-immune and update-refreshed per platform primer §7. It is the operational half of the method-exemplar design: `design-project` owns the exemplar *content* (what the articles are, why they exemplify); `fetch-articles` owns their *presence* (getting them onto disk in both representations). The research and review agents read `articles/` through the shared workspace; per the decision-log entry, if those agents later need fetch capability of their own, this skill ships in their profiles too rather than being reimplemented.
+A **supporting skill** of the project-mentor profile, bundled (registered in `.bundled_manifest`), curator-protected and update-refreshed per platform primer §7. It is the operational half of the method-exemplar design: `design-project` owns the exemplar *content* (what the articles are, why they exemplify); `fetch-articles` owns their *presence* (getting them onto disk in both representations). The research and review agents read `articles/` through the shared workspace; the **research-agent profile now ships a re-bundled copy** of this skill (2026-06-29, R7a — re-bundled, not reimplemented), and the review-agent profile will when built.
 
 ## Status
 

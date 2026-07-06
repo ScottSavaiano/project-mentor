@@ -170,13 +170,17 @@ delegation:
   model: google/gemma-4-26b-a4b-it
 
 # -------------------------------------------------------------------
-# Auxiliary task slots — all 14 pinned to Gemma 4 26B
+# Auxiliary task slots — all 15 pinned to Gemma 4 26B
 # -------------------------------------------------------------------
 # Pinned explicitly (not auto/inherit) so a `/model careful` upgrade never bleeds the
-# background jobs up to the Wizard tier. Hermes exposes 14 slots (verified 2026-06-23 — the
-# earlier config pinned only 8). Empirically validated 2026-06-20 (aux_test.py): gemma-4-26b
-# is adequate on the high-stakes slots (compression, approval, vision). NOTE: `curator` here
-# is the aux-job *model* slot, distinct from the top-level `curator.enabled` below.
+# background jobs up to the Wizard tier. Hermes exposes 14 GUI/aux slots (verified 2026-06-23 —
+# the earlier config pinned only 8), PLUS `background_review` (the post-turn self-improvement
+# review), added 2026-07-01 from the v0.17.0 memory docs — it also defaults to auto/inherit,
+# so without this pin a `/model careful` session would run every post-turn review on the Wizard
+# tier too. Empirically validated 2026-06-20 (aux_test.py): gemma-4-26b is adequate on the
+# high-stakes slots (compression, approval, vision). NOTE: `curator` here is the aux-job
+# *model* slot, distinct from the top-level `curator.enabled` below; likewise `background_review`
+# is the review job's *model*, distinct from the memory/skills write_approval gates.
 auxiliary:
   vision:             { provider: openrouter, model: google/gemma-4-26b-a4b-it }
   web_extract:        { provider: openrouter, model: google/gemma-4-26b-a4b-it }
@@ -192,6 +196,7 @@ auxiliary:
   curator:            { provider: openrouter, model: google/gemma-4-26b-a4b-it }
   monitor:            { provider: openrouter, model: google/gemma-4-26b-a4b-it }
   session_search:     { provider: openrouter, model: google/gemma-4-26b-a4b-it }
+  background_review:  { provider: openrouter, model: google/gemma-4-26b-a4b-it }
 
 # -------------------------------------------------------------------
 # Prompt caching — 1-hour TTL (Claude-only mechanism; moot for this profile)
@@ -213,6 +218,6 @@ terminal:
 # Curator (top-level) — skill-pruning curator, disabled on student profiles
 # -------------------------------------------------------------------
 # Distinct from auxiliary.curator above (that's the model the curator job uses). This switch
-# disables the v0.16.0 skill-pruning behavior so rarely-invoked curriculum skills aren't pruned.
+# disables the curator's skill-pruning (the `prune_builtins` behavior, default true; v0.16.0+, re-confirmed v0.17.0) so rarely-invoked curriculum skills aren't pruned.
 curator:
   enabled: false

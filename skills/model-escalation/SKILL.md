@@ -5,7 +5,7 @@ description: Recognize when a mentor conversation has entered a genuine high-jud
 
 # Model Escalation
 
-**Last edited:** 2026-05-26 (educator — refinements to default-tier identifier (Haiku 4.5) and downstream language; original Cowork draft 2026-05-22)
+**Last edited:** 2026-07-01 (Cowork — **`move`-noun ban fix**: swapped a banned noun "move" for step/choice/act/lesson per the standing voice ban, now mechanically caught by `voice_lint` `moves_noun`; decision-log 2026-07-01.) Prior — 2026-05-26 (educator — refinements to default-tier identifier (Haiku 4.5) and downstream language; original Cowork draft 2026-05-22)
 *Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
 
 ## What this skill is
@@ -47,7 +47,7 @@ If the mentor is uncertain whether a moment qualifies, the default is **not** to
 
 ## What this skill does NOT do
 
-- **Automatically switch models.** Hermes does not support cascading auto-switches in this way, and this is by design. The skill recommends; the student executes. The deliberate act of switching is itself the pedagogical move.
+- **Automatically switch models.** Hermes does not support cascading auto-switches in this way, and this is by design. The skill recommends; the student executes. The deliberate act of switching is itself the lesson.
 - **Report token costs.** That is `/usage`'s job, taught in Lesson 1. This skill does not surface or recommend cost tracking. For budget visibility, the `check-budget` skill is the appropriate path.
 - **Prompt the student to downgrade after the moment concludes.** The reference card from the setup lessons covers `/model default`; the student's habit, once formed, will handle it. A downgrade prompt would itself be a form of nagging.
 - **Generalize to the research or review agents.** This skill is initially project-mentor specific. The research and review agents have their own escalation considerations (probably narrower, since their work is less judgment-heavy), to be addressed in their own design phase.
@@ -114,7 +114,7 @@ If the educator later decides "we should also flag at moment *X*," or "the recom
 
 ## Where this skill lives in the architecture
 
-This skill ships as a **bundled skill** in the project-mentor profile, registered in the profile's `.bundled_manifest`. Bundled status is what makes the policy student-unmodifiable, curator-immune, and refreshed by profile updates (the protection model is documented in `hermes-platform-primer.md` Section 7). Students must not be able to disable or weaken this policy, since doing so would let them route past exactly the discipline the curriculum is trying to teach.
+This skill ships as a **bundled skill** in the project-mentor profile, registered in the profile's `.bundled_manifest`. Bundled status is what makes the policy student-unmodifiable, curator-protected, and refreshed by profile updates (the protection model is documented in `hermes-platform-primer.md` Section 7). Students must not be able to disable or weaken this policy, since doing so would let them route past exactly the discipline the curriculum is trying to teach.
 
 ## Status
 

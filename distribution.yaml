@@ -21,7 +21,17 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.3.0
+version: 0.4.0
+# Changelog:
+#   0.4.0 (2026-07-01) — cumulative catch-up release. CONFIG: model-strategy pins finalized
+#     (Daily = Gemma 4 26B, careful = Kimi K2.6; 15-slot aux pin incl. `background_review`;
+#     delegation pinned to Gemma; provider_routing [nextbit, siliconflow, modelrun]); floor
+#     >=0.17.0. SKILLS: the nine-item literature-review checklist (conduct-literature-review),
+#     identify-gap element renumbering, scaffold-section / compile-working-paper reconciliations,
+#     the re-bundle-synced supporting skills, and a project-wide `move`-noun ban fix across six
+#     skills. SOUL: research-teacher / faculty-mentor advisory framing. NOT included: the
+#     project-walkthrough execution-return receiver (R8c/R10 authoring — deferred to a later update).
+#   0.3.0 (2026-06-20) — core/foundation rename + advisory framing + model-strategy config + floor >=0.17.0.
 
 description: |
   Project Mentor — high-judgment social science research mentor for
@@ -30,8 +40,8 @@ description: |
   problem identification, research question, literature review, gap,
   paper structure, methodology, proposal, and the build-as-you-go
   working paper. One of three agents in the Hermes Research Curriculum
-  (with research-agent and review-agent). Defaults to Claude Opus 4.8
-  with no automatic fallback.
+  (with research-agent and review-agent). Daily tier = Gemma 4 26B;
+  careful tier = Kimi K2.6 via /model careful.
 
 author: "Dr. Savaiano (Bronx High School of Science Social Science Research Program)"
 license: "MIT"

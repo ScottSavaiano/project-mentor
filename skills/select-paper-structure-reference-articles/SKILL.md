@@ -81,7 +81,7 @@ Per the established convention: adapt wording and re-point examples to the stude
 
 ## Where this skill lives in the architecture
 
-A **project-track stage-skill** dispatched by `project-walkthrough`, bundled in the project-mentor distribution (curator-immune, update-refreshed per platform primer §7). It writes `reference_articles.md` only (contract §4.6). It carries no rationale trigger and no model-escalation reference — the deliberate negative case among the stage-skills, stated in "When this skill fires" — and no research-agent handoff. Upstream it consumes the gap section, the methods inventory, the summaries' method-and-data elements, and the educator-maintained `structure-models.yaml` trove (curriculum-articles repo); downstream, stage 11 (`derive-paper-structure`) is its sole consumer — this set is the input from which `paper_structure.md` is derived (Cycle 1) or extended (Cycles 2–3), per spec §§2, 4.2, 5.1.
+A **project-track stage-skill** dispatched by `project-walkthrough`, bundled in the project-mentor distribution (curator-protected, update-refreshed per platform primer §7). It writes `reference_articles.md` only (contract §4.6). It carries no rationale trigger and no model-escalation reference — the deliberate negative case among the stage-skills, stated in "When this skill fires" — and no research-agent handoff. Upstream it consumes the gap section, the methods inventory, the summaries' method-and-data elements, and the educator-maintained `structure-models.yaml` trove (curriculum-articles repo); downstream, stage 11 (`derive-paper-structure`) is its sole consumer — this set is the input from which `paper_structure.md` is derived (Cycle 1) or extended (Cycles 2–3), per spec §§2, 4.2, 5.1.
 
 ## Status
 
