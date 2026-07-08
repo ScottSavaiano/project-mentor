@@ -12,7 +12,7 @@ description: Fetches reference articles into the shared workspace and extracts a
 
 ## What this skill is
 
-`fetch-articles` maintains the workspace's local article library: canonical PDFs for the student and teacher to read, and extracted text versions for the agents to search and quote. It exists because reference articles do their work only when they are actually present — the mentor teaches from them, the research agent mines them during literature synthesis, the review agent checks claims against them, and the student learns published-paper craft by reading them.
+`fetch-articles` maintains the workspace's local article library: canonical PDFs for the student and teacher to read, and extracted text versions for the agents to search and quote. It exists because reference articles do their work only when they are actually present — the mentor teaches from them, the research agent mines them during literature synthesis, the Review Agent checks claims against them, and the student learns published-paper craft by reading them.
 
 The skill is deliberately general. Its first job is pre-staging the method-exemplar library at project startup, but the same mechanism serves any reference article the student selects across the project — Research Problem Articles, Project Reference Articles consolidations, Paper Structure Reference Articles.
 

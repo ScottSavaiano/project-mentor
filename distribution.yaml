@@ -21,8 +21,21 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.4.0
+version: 0.5.0
 # Changelog:
+#   0.5.0 (2026-07-08) — three-stream / 25-stage redesign + seven-step execution ripple.
+#     SOUL: reconciled to the core+extension methodology (a LEVEL distinction — core =
+#     advanced-undergraduate-level, extension = senior-thesis-level; "push"/"moonshot"
+#     retired), THREE research questions (Topic / Core-Methods / Extension-Methods), the
+#     reference-articles section reconciled to the three parallel streams, and the "more
+#     ambitious" → "more developed" scrub. SKILLS: the cycle template renumbered to the
+#     25-stage / three-stream model and the execution skills aligned to the seven-step
+#     Plan→Teach→Review-plan→Approve→Execute→Report→QC-audit flow across design-project,
+#     develop-research-question, identify-gap, conduct-literature-review, design-detailed-
+#     methodology, derive-paper-structure, scaffold-section, compile-working-paper, the
+#     project/paper walkthroughs, assemble-proposal, assess-new-cycle, and the re-bundled
+#     supporting skills; redirect-off-topic diagnostic-read removal + weekly-reflection
+#     parking; "Review Agent" capitalized throughout. CONFIG unchanged from 0.4.0.
 #   0.4.0 (2026-07-01) — cumulative catch-up release. CONFIG: model-strategy pins finalized
 #     (Daily = Gemma 4 26B, careful = Kimi K2.6; 15-slot aux pin incl. `background_review`;
 #     delegation pinned to Gemma; provider_routing [nextbit, siliconflow, modelrun]); floor
