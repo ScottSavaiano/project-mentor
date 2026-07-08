@@ -21,8 +21,13 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.6.0
+version: 0.7.0
 # Changelog:
+#   0.7.0 (2026-07-08) — SOUL fix: corrected the program length to the canonical **two to two
+#     and a half years** (program-context.md) in five places that had implied one year (the
+#     opening arc "at least a year, sometimes three"; the across-the-year / one-academic-year /
+#     year-long-project / through-the-year phrasings). No behavioral change; voice-read + educator-
+#     approved 2026-07-08.
 #   0.6.0 (2026-07-08) — NEW shared skill `maintain-bibliography` (+ co-bundled
 #     scripts/literature_discovery.py): maintains the paper's working bibliography with
 #     human-in-the-loop DOI verification (the student clicks each DOI / confirms each
