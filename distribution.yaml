@@ -21,8 +21,15 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.5.0
+version: 0.6.0
 # Changelog:
+#   0.6.0 (2026-07-08) — NEW shared skill `maintain-bibliography` (+ co-bundled
+#     scripts/literature_discovery.py): maintains the paper's working bibliography with
+#     human-in-the-loop DOI verification (the student clicks each DOI / confirms each
+#     non-DOI source before it is marked verified; the agent never invents a citation or
+#     field). Full verification runs on student demand + always at weekly journaling; at
+#     session close only bibliography CHANGES are reported. The STS no-AI-generated-citations
+#     compliance mechanism. Source of truth: design/citation-integrity-gate-2026-07-08.md.
 #   0.5.0 (2026-07-08) — three-stream / 25-stage redesign + seven-step execution ripple.
 #     SOUL: reconciled to the core+extension methodology (a LEVEL distinction — core =
 #     advanced-undergraduate-level, extension = senior-thesis-level; "push"/"moonshot"
