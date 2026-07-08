@@ -21,8 +21,13 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.8.0
+version: 0.9.0
 # Changelog:
+#   0.9.0 (2026-07-09) — NEW shared read-only `paper-coverage` skill (coverage view + versions/ archival
+#     snapshot; the safe subset of compile-working-paper); `project-briefing` now calls `paper-coverage` for
+#     its coverage slice. SOUL: added the V3b session-close nod ("before we wrap up, here's what I logged…").
+#     `check-budget` refresh — model tiers corrected to Gemma 4 26B daily / Kimi K2.6 careful (dollar figures
+#     flagged pending re-verification). compile-working-paper stays the sole mentor-only paper reconciler.
 #   0.8.0 (2026-07-09) — NEW shared skill `session-close-summary` (V3b: the per-session "here's what
 #     I logged" receipt). `redirect-off-topic` wired to the built X5 capture path (appends parked items
 #     to journals/parking-lot.md; retired the "Tier-3 wiring pending" language). SOUL: frame-break header

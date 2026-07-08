@@ -6,6 +6,7 @@ description: Pull the student's current OpenRouter sub-key usage and remaining b
 # Check Budget
 
 **Last edited:** (pre-2026-05-26 baseline state — authored 2026-05-24, edit history before the attribution convention's adoption not retroactively reconstructed; new edits should bump this line per the convention)
+*Refreshed 2026-07-09 (Cowork): model tiers corrected to the current strategy (Gemma 4 26B daily; careful = Kimi K2.6); the dollar figures flagged pending re-verification; *
 *Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
 
 ## What this skill is
@@ -26,7 +27,7 @@ The skill also runs when the student types `/check-budget` directly in the TUI. 
 
 ## When this skill does NOT fire
 
-- The student is asking about cost in the abstract ("how much does Opus cost per turn?") rather than their specific remaining budget. That is a question for the mentor to answer from the SOUL's "When to use a stronger model" section or from general knowledge, not a budget-check.
+- The student is asking about cost in the abstract ("how much does the careful tier cost per turn?") rather than their specific remaining budget. That is a question for the mentor to answer from the SOUL's "When to use a stronger model" section or from general knowledge, not a budget-check.
 - The student is asking about the *project's* budget overall rather than their own (e.g., "how much is the school spending on this?"). That is an educator-side question, not a student-side one; the mentor declines to speak for the school's overall ledger.
 - The student is mid-conversation on a research question and the skill would be a distraction. The mentor uses judgment — if a budget check would interrupt productive thinking, it can be deferred to a natural pause.
 
@@ -44,10 +45,10 @@ The mentor reads the tool output and delivers the summary to the student in its 
 
 ## What the typical-cost translations rest on
 
-The translations are heuristics, not promises. The skill uses curriculum-verified per-session cost estimates from `decision-history-and-rationale.md` Section 11.1:
+The translations are heuristics, not promises. **NOTE (2026-07-09 refresh): the specific dollar figures in this skill — including the register examples below — are inherited from the earlier Haiku/Opus tiers (§11.1) and are pending re-verification against the current Gemma-daily / careful-tier pricing; the script's constants are the source of truth, refreshed when `monitor-curriculum-models` flags a price change.** The current tiers:
 
-- **Default tier (Haiku 4.5, cached effective):** ~$0.047 per 10-turn mentor session with the curriculum's typical ~10K-token system prompt + workspace context.
-- **Careful tier (Opus 4.8, cached effective):** ~$0.23 per 10-turn high-judgment consultation.
+- **Default tier (Gemma 4 26B):** the everyday model — very low per-session cost (the free/near-free daily tier).
+- **Careful tier (Kimi K2.6):** the higher-judgment model — a higher per-session cost than the daily tier.
 
 These are session-shape averages, not exact predictions. The per-session estimate assumes the curriculum's typical session shape (about 10 turns, ~10K-token system prompt + workspace, ~500-token completions per turn). A student who routinely runs short consultations (3-4 turns) will see their actual cost-per-session run substantially below the estimate, and "N more sessions" will undercount their real remaining headroom. A student running long deep-work sessions (20+ turns) will burn through budget faster than the estimate predicts. The summary's mentor-voice framing makes the heuristic nature clear ("roughly," "at the rate you have been working"); the script does NOT yet personalize the estimate per-student based on their actual usage_daily ÷ daily-session-count. A future revision could pull that personalization in — for now, the unpersonalized estimate is the trade-off for keeping the skill simple. If the educator's `monitor-curriculum-models` skill (Tier 8) detects pricing changes for the curriculum's three models, the typical-cost values in this skill's script are updated in the same release.
 

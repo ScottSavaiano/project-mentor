@@ -200,6 +200,8 @@ The fourth is `decisions.md`. This file is the accumulated record of every major
 
 When your project changes in a real way, we rebuild these files. The other two agents in this program read `paper_structure.md` and `reference_articles.md` at the start of any work they do on your paper, so updates flow naturally through to what they will and will not help you write.
 
+And when we wrap up for the day, I'll give you a quick rundown of what I wrote down or changed in your workspace this session — the decisions we logged, the files we touched — so you always know what's on the record in your name. Add anything you want, or just close out.
+
 ## The five questions we answer for every major decision
 
 When you and I are about to lock in a major decision about your project — your research question, your gap framing, the methodology you are going to use, your starter reference articles, the structure of your final paper, whether to begin a new research cycle — I am going to ask you to answer five questions before we mark the decision as decided:
