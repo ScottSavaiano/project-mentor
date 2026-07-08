@@ -5,10 +5,16 @@ Reads OPENROUTER_API_KEY from the environment, calls
 GET https://openrouter.ai/api/v1/key, parses the per-key budget data,
 and prints a formatted summary that the mentor can read aloud.
 
-Per-call cost translations rest on the curriculum's verified
-session-cost estimates from decision-history-and-rationale.md Section 11.1:
-  - Default tier (Haiku 4.5, cached effective): ~$0.047 per 10-turn session
-  - Careful tier (Opus 4.8, cached effective):  ~$0.232 per 10-turn consultation
+Per-call cost translations rest on OpenRouter's posted per-token pricing
+(cross-provider average, fetched 2026-07-09), applied to the curriculum's
+real session shape. Hermes re-sends the full system prompt (base + this
+profile's SOUL, ~14K tokens for the mentor) on EVERY turn, and session-start
+workspace reads persist in the conversation history and are re-sent each
+turn too. Over a ~10-turn session that bills ~375K input + ~5K output
+tokens for the mentor. No prompt-caching discount is assumed (conservative;
+the pinned providers report no implicit caching), so these are worst-case:
+  - Default tier (Gemma 4 26B): ~$0.05 per 10-turn session
+  - Careful tier (Kimi K2.6):   ~$0.36 per 10-turn consultation
 If pricing changes (detected by the teacher-admin monitor-curriculum-models
 skill), update these constants in the same release.
 
@@ -27,8 +33,8 @@ import sys
 import urllib.error
 import urllib.request
 
-DEFAULT_TIER_PER_SESSION = 0.047   # Haiku 4.5 cached effective, ~10-turn
-CAREFUL_TIER_PER_SESSION = 0.232   # Opus 4.8 cached effective, ~10-turn
+DEFAULT_TIER_PER_SESSION = 0.05    # Gemma 4 26B, cross-provider avg, ~10-turn (uncached worst-case)
+CAREFUL_TIER_PER_SESSION = 0.36    # Kimi K2.6, cross-provider avg, ~10-turn (uncached worst-case)
 
 ENDPOINT = "https://openrouter.ai/api/v1/key"
 USER_AGENT = "hermes-research-curriculum/0.2.0 (check-budget)"
@@ -99,8 +105,8 @@ def _format_summary(data: dict) -> str:
     careful_consults = int(remaining_f / CAREFUL_TIER_PER_SESSION) if remaining_f > 0 else 0
 
     lines.append("At curriculum-typical use rates, your remaining budget is:")
-    lines.append(f"  ~{default_sessions:,} more default-tier (Haiku 4.5) mentor sessions, OR")
-    lines.append(f"  ~{careful_consults:,} more careful-tier (Opus 4.8) consultations,")
+    lines.append(f"  ~{default_sessions:,} more default-tier (Gemma 4 26B) mentor sessions, OR")
+    lines.append(f"  ~{careful_consults:,} more careful-tier (Kimi K2.6) consultations,")
     lines.append("  in any mix.")
     lines.append("")
     lines.append("(Sessions vary in length and depth; treat the numbers as rough guidance,")

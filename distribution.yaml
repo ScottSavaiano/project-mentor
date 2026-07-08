@@ -21,8 +21,14 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.9.0
+version: 0.9.1
 # Changelog:
+#   0.9.1 (2026-07-09) — `check-budget` cost re-verification. Dollar figures re-derived from
+#     OpenRouter's posted per-token pricing (cross-provider average) and costed on the REAL session
+#     shape — the full SOUL (~14K tok) is re-sent every turn and session-start workspace reads persist
+#     in history, so a ~10-turn session bills ~375K input + 5K output tokens. Uncached worst-case:
+#     default (Gemma 4 26B) ~$0.05/session, careful (Kimi K2.6) ~$0.36/consultation. Script constants +
+#     SKILL register examples updated to match; caching caveat documented. No behavioral change.
 #   0.9.0 (2026-07-09) — NEW shared read-only `paper-coverage` skill (coverage view + versions/ archival
 #     snapshot; the safe subset of compile-working-paper); `project-briefing` now calls `paper-coverage` for
 #     its coverage slice. SOUL: added the V3b session-close nod ("before we wrap up, here's what I logged…").

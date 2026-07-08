@@ -6,7 +6,7 @@ description: Pull the student's current OpenRouter sub-key usage and remaining b
 # Check Budget
 
 **Last edited:** (pre-2026-05-26 baseline state — authored 2026-05-24, edit history before the attribution convention's adoption not retroactively reconstructed; new edits should bump this line per the convention)
-*Refreshed 2026-07-09 (Cowork): model tiers corrected to the current strategy (Gemma 4 26B daily; careful = Kimi K2.6); the dollar figures flagged pending re-verification; *
+*Refreshed 2026-07-09 (Cowork): model tiers corrected to the current strategy (Gemma 4 26B daily; careful = Kimi K2.6) and the dollar figures re-verified against OpenRouter's posted per-token pricing (cross-provider average), now costed on the REAL session shape — the full SOUL is re-sent every turn and session-start workspace reads persist in history. Uncached worst-case: default ~$0.05/session; careful ~$0.36/consultation.*
 *Editing convention: see `00-handoff.md` → "Editing conventions" for editor identifiers and revision-marker rules.*
 
 ## What this skill is
@@ -45,12 +45,12 @@ The mentor reads the tool output and delivers the summary to the student in its 
 
 ## What the typical-cost translations rest on
 
-The translations are heuristics, not promises. **NOTE (2026-07-09 refresh): the specific dollar figures in this skill — including the register examples below — are inherited from the earlier Haiku/Opus tiers (§11.1) and are pending re-verification against the current Gemma-daily / careful-tier pricing; the script's constants are the source of truth, refreshed when `monitor-curriculum-models` flags a price change.** The current tiers:
+The translations are heuristics, not promises. The dollar figures were re-verified 2026-07-09 against OpenRouter's posted per-token pricing for the curriculum's two models, using each model's **cross-provider average** price — which sits above the single cheapest ("official") posted price, so the estimate stays conservative. The current tiers:
 
-- **Default tier (Gemma 4 26B):** the everyday model — very low per-session cost (the free/near-free daily tier).
-- **Careful tier (Kimi K2.6):** the higher-judgment model — a higher per-session cost than the daily tier.
+- **Default tier (Gemma 4 26B):** the everyday model. Cross-provider average ≈ $0.12/M input, $0.41/M output → **~$0.05 per 10-turn session**.
+- **Careful tier (Kimi K2.6):** the higher-judgment model. Cross-provider average ≈ $0.90/M input, $3.92/M output → **~$0.36 per 10-turn consultation**.
 
-These are session-shape averages, not exact predictions. The per-session estimate assumes the curriculum's typical session shape (about 10 turns, ~10K-token system prompt + workspace, ~500-token completions per turn). A student who routinely runs short consultations (3-4 turns) will see their actual cost-per-session run substantially below the estimate, and "N more sessions" will undercount their real remaining headroom. A student running long deep-work sessions (20+ turns) will burn through budget faster than the estimate predicts. The summary's mentor-voice framing makes the heuristic nature clear ("roughly," "at the rate you have been working"); the script does NOT yet personalize the estimate per-student based on their actual usage_daily ÷ daily-session-count. A future revision could pull that personalization in — for now, the unpersonalized estimate is the trade-off for keeping the skill simple. If the educator's `monitor-curriculum-models` skill (Tier 8) detects pricing changes for the curriculum's three models, the typical-cost values in this skill's script are updated in the same release.
+These figures are costed on the curriculum's **real session shape**, which is heavier than a naive "10 turns × a few hundred tokens" estimate. Hermes re-sends the entire system prompt — the Hermes base plus this profile's full SOUL (~14K tokens for the mentor) — on *every* turn, and the files read at session start (`project_design.md`, `decisions.md`, the `reviews/` and `journals/` folders, and the rest) persist in the conversation history and are re-sent on every subsequent turn as well. Across a ~10-turn session that bills on the order of **375K input + 5K output tokens** for the mentor. The figures assume **no prompt-caching discount** (the pinned providers report no implicit caching), so they are a worst-case ceiling: if Hermes caches the stable SOUL-plus-reads prefix, real cost can run materially lower, which only leaves the student with more headroom than the estimate promises. The script's constants remain the source of truth, refreshed when `monitor-curriculum-models` flags a price change. A student who routinely runs short consultations (3-4 turns) will see their actual cost-per-session run substantially below the estimate, and "N more sessions" will undercount their real remaining headroom. A student running long deep-work sessions (20+ turns) will burn through budget faster than the estimate predicts. The summary's mentor-voice framing makes the heuristic nature clear ("roughly," "at the rate you have been working"); the script does NOT yet personalize the estimate per-student based on their actual usage_daily ÷ daily-session-count. A future revision could pull that personalization in — for now, the unpersonalized estimate is the trade-off for keeping the skill simple. If the educator's `monitor-curriculum-models` skill (Tier 8) detects pricing changes for the curriculum's three models, the typical-cost values in this skill's script are updated in the same release.
 
 ## The output register
 
@@ -58,11 +58,11 @@ The mentor's voice in delivering the budget summary should match the SOUL — di
 
 **Plenty remaining:**
 
-> "You have used $3.40 of your $40 budget this month — most of it on the default tier. That leaves you $36.60, which is roughly 750 more default-tier sessions or 160 more careful-tier consultations at the rate you have been working. You have room."
+> "You have used $3.40 of your $40 budget this month — most of it on the default tier. That leaves you $36.60, which is roughly 730 more default-tier sessions or 100 more careful-tier consultations at the rate you have been working. You have room."
 
 **Approaching the limit:**
 
-> "You have used $32 of your $40 budget this month. You have $8 left, which is roughly 170 default-tier sessions or 35 careful-tier consultations at the rate you have been working. We are at about 80% spent — worth thinking about which kinds of conversations are most valuable to keep using budget on. If you need more, that is a conversation with your research teacher."
+> "You have used $32 of your $40 budget this month. You have $8 left, which is roughly 160 default-tier sessions or 22 careful-tier consultations at the rate you have been working. We are at about 80% spent — worth thinking about which kinds of conversations are most valuable to keep using budget on. If you need more, that is a conversation with your research teacher."
 
 **Over the limit (rare; the educator's pre-approval gate normally catches this before it happens):**
 
