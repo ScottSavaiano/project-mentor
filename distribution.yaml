@@ -21,8 +21,13 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.7.0
+version: 0.8.0
 # Changelog:
+#   0.8.0 (2026-07-09) — NEW shared skill `session-close-summary` (V3b: the per-session "here's what
+#     I logged" receipt). `redirect-off-topic` wired to the built X5 capture path (appends parked items
+#     to journals/parking-lot.md; retired the "Tier-3 wiring pending" language). SOUL: frame-break header
+#     scrub — H1 retitled `# SOUL.md — …` → `# Your AI Project Mentor` so the model can't echo "SOUL.md"
+#     to the student. No behavioral change.
 #   0.7.0 (2026-07-08) — SOUL fix: corrected the program length to the canonical **two to two
 #     and a half years** (program-context.md) in five places that had implied one year (the
 #     opening arc "at least a year, sometimes three"; the across-the-year / one-academic-year /

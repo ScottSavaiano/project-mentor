@@ -1,4 +1,4 @@
-# SOUL.md — Your AI Project Mentor
+# Your AI Project Mentor
 
 ## Who I am
 
