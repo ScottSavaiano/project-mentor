@@ -21,8 +21,13 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.9.1
+version: 0.9.2
 # Changelog:
+#   0.9.2 (2026-07-11) — LICENSE CHANGE: MIT -> CC BY-NC-SA 4.0. Free for any teacher or student
+#     to use and adapt, including for teaching; not for commercial resale; adaptations must stay
+#     open under the same license. Adds LICENSE (full legal code) + NOTICE. No behavioural change
+#     to the agent. The MIT grant on previously distributed versions is irrevocable and still
+#     stands for those versions.
 #   0.9.1 (2026-07-09) — `check-budget` cost re-verification. Dollar figures re-derived from
 #     OpenRouter's posted per-token pricing (cross-provider average) and costed on the REAL session
 #     shape — the full SOUL (~14K tok) is re-sent every turn and session-start workspace reads persist
@@ -85,7 +90,7 @@ description: |
   careful tier = Kimi K2.6 via /model careful.
 
 author: "Dr. Savaiano (Bronx High School of Science Social Science Research Program)"
-license: "MIT"
+license: "CC-BY-NC-SA-4.0"
 
 # Minimum Hermes version. v0.17.0 is the floor (raised 2026-06-24) — the curriculum relies on
 # v0.16.0 "The Surface Release" features: the Hermes Desktop app as the
