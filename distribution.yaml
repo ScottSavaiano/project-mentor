@@ -21,8 +21,11 @@ name: project-mentor
 
 # Version follows semver. v0.x while the mentor is still being built out;
 # v1.0.0 is reserved for the first release that ships all Tier 1 skills.
-version: 0.9.2
+version: 0.9.3
 # Changelog:
+#   0.9.3 (2026-07-14) — SOUL: topic-origin revision (find your topic by reading the discipline's literature,
+#     not from personally-lived experience). design-detailed-methodology reads the data-interaction mode set at
+#     Stage 5.3 rather than reopening it. No other behavioral change.
 #   0.9.2 (2026-07-11) — LICENSE CHANGE: MIT -> CC BY-NC-SA 4.0. Free for any teacher or student
 #     to use and adapt, including for teaching; not for commercial resale; adaptations must stay
 #     open under the same license. Adds LICENSE (full legal code) + NOTICE. No behavioural change

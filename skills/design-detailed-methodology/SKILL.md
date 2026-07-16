@@ -112,3 +112,14 @@ A **project-track stage-skill** dispatched by `project-walkthrough`, bundled in 
 2. **Moment wording.** All **four** moments await the educator's voice read, per precedent. Moments 1–3 are the committed wordings; **Moment 4 (the writing handoff) is new (2026-06-10 reconciliation)** — a thin transition beat following the testable-hypothesis teaching beat (Moment 3); *read complete 2026-06-10; scaffold-delivery clause reworded (see Status).*
 3. **The methodology block's format for `assemble-proposal`.** Stage 14 compiles `## Methodology (Cycle N)` into the proposal; its authoring should confirm the block's structure compiles cleanly (the assemble-proposal package should read this skill and the block format together).
 4. ~~**`blocked-on-consultation` vs `blocked-on-precondition` for the method-approach contradiction.** The sibling (identify-gap) used `blocked-on-precondition` for its contradiction path; this draft uses `blocked-on-consultation` because the §7 map's near-restart gravity makes the teacher conversation the right gate before any rework begins. The walkthrough author should confirm which return value routes the stage-1 rework correctly — flagged so both instances are decided together.~~ **Resolved 2026-06-10 (contract-promotion pass, §11.11):** neither — both instances now return the new **`blocked-on-upstream-reopening`** value (contract §5.1), which routes the student through the stage-1 rationale gate. The edge case above is updated.
+
+### The data-interaction mode is already settled — read it, do not reopen it
+
+By Stage 14 the **`data_interaction_mode`** was resolved at **Stage 5** (`check-data-policy`, gated at 5.5) and is
+recorded in `data/data-validity-log.md`. **Read it.** Do not re-litigate it here; the student has already read the
+terms, quoted the clause, and written the determination up in their journal.
+
+What it changes for methodology design: under **ROW-RULE** the research agent will write and run the analysis
+code — locally, against every row — but will never receive an individual record. That is not a limit on *which*
+estimator the student may choose. It is a fact about how the work gets executed, and about how QC gets divided
+(the Review Agent audits the pipeline; the student audits the rows).
